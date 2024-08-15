@@ -6,9 +6,7 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-  }
-  body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Bebas Neue", system-ui;
   }
 `;
 

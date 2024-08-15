@@ -1,5 +1,6 @@
 "use client";
+import Navigations from "@/components/navigations/Navigations";
 
 export default function Home() {
-  return <h1>Hello world</h1>;
+  return <Navigations />;
 }
