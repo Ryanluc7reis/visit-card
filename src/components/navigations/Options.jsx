@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "../image/Image";
 
 const MenuContainer = styled.header`
   width: 100%;
@@ -12,6 +13,7 @@ const MenuContainer = styled.header`
   text-align: center;
   justify-content: center;
   gap: 15px;
+  z-index: 5;
 `;
 const Option = styled.h3`
   color: white;
@@ -34,9 +36,6 @@ const Option = styled.h3`
     }
   }
 `;
-const Image = styled.img`
-  padding: 1px;
-`;
 
 export default function Options({ hasUser }) {
   return (
@@ -52,7 +51,7 @@ export default function Options({ hasUser }) {
           <Option>Editar meus links </Option>
           <Option>Meus links</Option>
           <Option style={{ color: "red" }}>
-            <Image src="/sair.png" alt="" />
+            <Image image="/sair.png" alt="" />
             Sair
           </Option>
         </div>
