@@ -7,6 +7,7 @@ const AboutContainer = styled.div`
   min-height: 180px;
   background-color: red;
   padding: 10px;
+  background: #1b1f23;
   @media (min-width: 768px) {
     width: 600px;
   }
@@ -54,12 +55,15 @@ const StyledFlexDescription = styled.div`
 `;
 const NameAndLabel = styled.h4`
   font-weight: bold;
+  color: #e2e3e3;
 `;
 const Localization = styled.h4`
   font-weight: 400;
+  color: #e2e3e3;
 `;
 const Description = styled.h4`
   font-weight: 500;
+  color: #e2e3e3;
 `;
 export default function About() {
   return (

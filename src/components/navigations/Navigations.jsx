@@ -12,6 +12,7 @@ const NavContainer = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 8px;
+  background: #000000f0;
 `;
 const ImageAlt = styled(Image)`
   z-index: 5;
@@ -20,7 +21,7 @@ export default function Navigations() {
   const [isMenu, setIsMenu] = useState(false);
   return (
     <NavContainer>
-      <h3 style={{ fontStyle: "italic" }}>HelloVisit</h3>
+      <h3 style={{ fontStyle: "italic", color: "#E2E3E3" }}>HelloVisit</h3>
       {isMenu && <Options hasUser={true} />}
       <ImageAlt
         onClick={() => setIsMenu(!isMenu)}

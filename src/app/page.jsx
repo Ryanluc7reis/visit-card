@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import Navigations from "@/components/navigations/Navigations";
 import About from "@/components/about/About";
+import Link from "@/components/links/Link";
 
 const Container = styled.div`
   width: 100%;
@@ -13,8 +14,11 @@ const Container = styled.div`
   align-items: center;
   padding: 20px 0px;
   gap: 25px;
+  background: #000000f0;
 `;
-const Title = styled.h2``;
+const Title = styled.h2`
+  color: #e2e3e3;
+`;
 const Line = styled.div`
   width: 170px;
   height: 2px;
@@ -36,6 +40,9 @@ export default function Home() {
           <Title>Redes Sociais</Title>
           <Line />
         </StyledFlexTitle>
+        <Link />
+        <Link />
+        <Link />
       </Container>
     </>
   );
