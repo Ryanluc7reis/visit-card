@@ -12,7 +12,7 @@ const NavContainer = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 8px;
-  background: #000000f0;
+  background: ${(props) => props.theme.backgroundDark};
 `;
 const ImageAlt = styled(Image)`
   z-index: 5;

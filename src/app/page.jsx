@@ -14,10 +14,10 @@ const Container = styled.div`
   align-items: center;
   padding: 20px 0px;
   gap: 25px;
-  background: #000000f0;
+  background: ${(props) => props.theme.backgroundDark};
 `;
 const Title = styled.h2`
-  color: #e2e3e3;
+  color: ${(props) => props.theme.text};
 `;
 const Line = styled.div`
   width: 170px;

@@ -5,7 +5,7 @@ import Image from "@/components/image/Image";
 const LinkContainer = styled.div`
   width: 87%;
   height: 60px;
-  background: #1b1f23;
+  background: ${(props) => props.theme.background};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,7 +20,7 @@ const ImageAlt = styled(Image)`
   height: 45px;
 `;
 const SocialName = styled.h4`
-  color: #e2e3e3;
+  color: ${(props) => props.theme.text};
 `;
 export default function Link() {
   return (

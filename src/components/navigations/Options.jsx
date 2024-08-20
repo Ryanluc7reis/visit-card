@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import Image from "../image/Image";
 
 const MenuContainer = styled.header`
@@ -36,7 +37,12 @@ const Option = styled.h3`
     }
   }
 `;
-
+const OptionAlt = styled(Option)`
+  flex-direction: column;
+`;
+const OptionColor = styled.h5`
+  color: grey;
+`;
 export default function Options({ hasUser }) {
   return (
     <MenuContainer>
@@ -50,6 +56,10 @@ export default function Options({ hasUser }) {
           <Option>Sobre nós</Option>
           <Option>Editar meus links </Option>
           <Option>Meus links</Option>
+          <OptionAlt>
+            Modo escuro
+            <OptionColor>Ativado</OptionColor>
+          </OptionAlt>
           <Option style={{ color: "red" }}>
             <Image image="/sair.png" alt="" />
             Sair

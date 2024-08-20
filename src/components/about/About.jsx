@@ -55,15 +55,15 @@ const StyledFlexDescription = styled.div`
 `;
 const NameAndLabel = styled.h4`
   font-weight: bold;
-  color: #e2e3e3;
+  color: ${(props) => props.theme.text};
 `;
 const Localization = styled.h4`
   font-weight: 400;
-  color: #e2e3e3;
+  color: ${(props) => props.theme.text};
 `;
 const Description = styled.h4`
   font-weight: 500;
-  color: #e2e3e3;
+  color: ${(props) => props.theme.text};
 `;
 export default function About() {
   return (

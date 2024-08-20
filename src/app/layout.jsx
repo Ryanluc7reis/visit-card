@@ -1,5 +1,7 @@
 "use client";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+
+import { theme } from "../theme";
 
 const GlobalStyles = createGlobalStyle`
   * { 
@@ -13,8 +15,10 @@ const GlobalStyles = createGlobalStyle`
 export default function RootLayout({ children }) {
   return (
     <html>
-      <GlobalStyles />
-      <body suppressHydrationWarning={true}>{children}</body>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <body suppressHydrationWarning={true}>{children}</body>
+      </ThemeProvider>
     </html>
   );
 }
