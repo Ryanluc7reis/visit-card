@@ -1,5 +1,6 @@
 "use client";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { ContextThemeProvider } from "@/context/ContextTheme";
 
 import { theme } from "../theme";
 
@@ -10,15 +11,18 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     font-family: "Bebas Neue", system-ui;
   }
+ 
 `;
 
 export default function RootLayout({ children }) {
   return (
     <html>
-      <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <body suppressHydrationWarning={true}>{children}</body>
-      </ThemeProvider>
+      <ContextThemeProvider>
+        <ThemeProvider theme={theme}>
+          <GlobalStyles />
+          <body suppressHydrationWarning={true}>{children}</body>
+        </ThemeProvider>
+      </ContextThemeProvider>
     </html>
   );
 }
