@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useState } from "react";
 import { useTheme } from "@/context/ContextTheme";
 
@@ -44,15 +44,54 @@ const OptionAlt = styled(Option)`
 `;
 const OptionColor = styled.p`
   font-size: 16px;
-  color: grey;
-  padding: 7px;
+  color: #f3f3f3;
+  padding: 14px 10px;
+
+  @media (min-width: 768px) {
+    :hover {
+      cursor: pointer;
+      background-color: ${(props) => props.theme.hoverDark};
+    }
+  }
 `;
 const MenuColorContainer = styled.div`
-  width: 80%;
-  height: 70px;
+  width: 100%;
+  height: 100px;
   position: absolute;
-  background: red;
-  bottom: 18%;
+  background: ${(props) => props.theme.backgroundMenuDark};
+  bottom: 11%;
+  animation: ${(props) => (props.showOptions ? slideDown : slideUp)} 0.3s
+    forwards;
+  transform-origin: top;
+  @media (min-width: 1300px) {
+    bottom: 17%;
+  }
+`;
+const slideDown = keyframes`
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+`;
+
+const slideUp = keyframes`
+  from {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  to {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+`;
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background: #a3a3a379;
 `;
 export default function Options({ hasUser }) {
   const [showSelectColor, setIsShowSelectColor] = useState(false);
@@ -69,15 +108,19 @@ export default function Options({ hasUser }) {
         >
           <Option>Sobre nós</Option>
           <Option>Editar meus links </Option>
-          <Option isDark={theme}>Meus links</Option>
+          <Option>Meus links</Option>
           <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
             Modo escuro
-            <OptionColor>
+            <h5 style={{ color: "#707070" }}>
               {theme === "dark" ? "Ativado" : "Desativado"}
-            </OptionColor>
+            </h5>
             {showSelectColor && (
-              <MenuColorContainer>
+              <MenuColorContainer
+                isDark={theme === "dark" ? true : false}
+                showOptions={showSelectColor}
+              >
                 <OptionColor onClick={toggleThemeDark}>On</OptionColor>
+                <Line />
                 <OptionColor onClick={toggleThemeLight}>Off</OptionColor>
               </MenuColorContainer>
             )}
