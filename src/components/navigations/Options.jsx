@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useState } from "react";
+import { useTheme } from "@/context/ContextTheme";
 
 import Image from "../image/Image";
 
@@ -8,7 +10,7 @@ const MenuContainer = styled.header`
   left: 0;
   position: fixed;
   min-height: 100vh;
-  background-color: #2b2b2bdf;
+  background-color: ${(props) => props.theme.backgroundMenuDark};
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -24,7 +26,7 @@ const Option = styled.h3`
   justify-content: center;
   width: 100%;
   padding: 20px 0px;
-  border-bottom: 0.7px solid #a3a3a379;
+  border-bottom: 1px solid #a3a3a379;
   cursor: pointer;
   :active {
     background-color: #3a3a3b7a;
@@ -33,32 +35,52 @@ const Option = styled.h3`
 
   @media (min-width: 615px) {
     :hover {
-      background-color: #68686879;
+      background-color: ${(props) => props.theme.hoverDark};
     }
   }
 `;
 const OptionAlt = styled(Option)`
   flex-direction: column;
 `;
-const OptionColor = styled.h5`
+const OptionColor = styled.p`
+  font-size: 16px;
   color: grey;
+  padding: 7px;
+`;
+const MenuColorContainer = styled.div`
+  width: 80%;
+  height: 70px;
+  position: absolute;
+  background: red;
+  bottom: 18%;
 `;
 export default function Options({ hasUser }) {
+  const [showSelectColor, setIsShowSelectColor] = useState(false);
+  const { theme, toggleThemeLight, toggleThemeDark } = useTheme();
+
   return (
     <MenuContainer>
       {hasUser ? (
         <div
           style={{
-            borderBottom: "0.7px solid #a3a3a379",
-            borderTop: "0.7px solid #a3a3a379",
+            borderBottom: "1px solid #a3a3a379",
+            borderTop: "1px solid #a3a3a379",
           }}
         >
           <Option>Sobre nós</Option>
           <Option>Editar meus links </Option>
-          <Option>Meus links</Option>
-          <OptionAlt>
+          <Option isDark={theme}>Meus links</Option>
+          <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
             Modo escuro
-            <OptionColor>Ativado</OptionColor>
+            <OptionColor>
+              {theme === "dark" ? "Ativado" : "Desativado"}
+            </OptionColor>
+            {showSelectColor && (
+              <MenuColorContainer>
+                <OptionColor onClick={toggleThemeDark}>On</OptionColor>
+                <OptionColor onClick={toggleThemeLight}>Off</OptionColor>
+              </MenuColorContainer>
+            )}
           </OptionAlt>
           <Option style={{ color: "red" }}>
             <Image image="/sair.png" alt="" />
@@ -68,8 +90,8 @@ export default function Options({ hasUser }) {
       ) : (
         <div
           style={{
-            borderBottom: "0.7px solid #a3a3a379",
-            borderTop: "0.7px solid #a3a3a379",
+            borderBottom: "1px solid #a3a3a379",
+            borderTop: "1px solid #a3a3a379",
           }}
         >
           <Option>Comprar cartão</Option>

@@ -1,13 +1,20 @@
 import styled from "styled-components";
+import { useTheme } from "@/context/ContextTheme";
 
 import Image from "../image/Image";
 
 const AboutContainer = styled.div`
   width: 90%;
   min-height: 180px;
-  background-color: red;
   padding: 10px;
-  background: #1b1f23;
+  background: ${(props) =>
+    props.isDark
+      ? props.theme.backgroundContentDark
+      : props.theme.backgroundContentLight};
+  border: 1px solid
+    ${(props) =>
+      props.isDark ? props.theme.borderDark : props.theme.borderLight};
+  border-radius: 6px;
   @media (min-width: 768px) {
     width: 600px;
   }
@@ -20,7 +27,7 @@ const ImageLabel = styled(Image)`
   width: 90px;
   height: 80px;
   background: purple;
-  border-radius: 44px;
+  border-radius: 54px;
   position: absolute;
   left: 37%;
 
@@ -55,33 +62,58 @@ const StyledFlexDescription = styled.div`
 `;
 const NameAndLabel = styled.h4`
   font-weight: bold;
-  color: ${(props) => props.theme.text};
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
 const Localization = styled.h4`
   font-weight: 400;
-  color: ${(props) => props.theme.text};
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
 const Description = styled.h4`
-  font-weight: 500;
-  color: ${(props) => props.theme.text};
+  font-weight: 400;
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
 export default function About() {
+  const { theme } = useTheme();
   return (
-    <AboutContainer>
+    <AboutContainer isDark={theme === "dark" ? true : false}>
       <StyledFlexImages>
-        <ImageAlt image="share.png" alt="" />
+        <ImageAlt
+          isDark={theme === "dark" ? true : false}
+          imageDark="share.png"
+          image="shareLight.png"
+          alt=""
+        />
         <ImageLabel image="next.svg" />
-        <ImageAlt image="phone.png" alt="" />
+        <ImageAlt
+          isDark={theme === "dark" ? true : false}
+          imageDark="phone.png"
+          image="phoneLight.png"
+          alt=""
+        />
       </StyledFlexImages>
 
       <StyledFlexDescription>
-        <NameAndLabel>Ryan Lucas</NameAndLabel>
+        <NameAndLabel isDark={theme === "dark" ? true : false}>
+          Ryan Lucas
+        </NameAndLabel>
         <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-          <Image image="map.png" alt="" />
-          <Localization>Uberlândia - MG, Brasil</Localization>
+          <Image
+            isDark={theme === "dark" ? true : false}
+            imageDark="map.png"
+            image="mapLight.png"
+            alt=""
+          />
+          <Localization isDark={theme === "dark" ? true : false}>
+            Uberlândia - MG, Brasil
+          </Localization>
         </div>
-        <NameAndLabel>HelloVisit</NameAndLabel>
-        <Description>
+        <NameAndLabel isDark={theme === "dark" ? true : false}>
+          HelloVisit
+        </NameAndLabel>
+        <Description isDark={theme === "dark" ? true : false}>
           {" "}
           A Hello te oferece o melhor cartao de visita do mercada,
           possibilitando você ter um certo acesso com aproximação

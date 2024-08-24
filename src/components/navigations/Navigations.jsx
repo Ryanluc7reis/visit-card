@@ -1,31 +1,39 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useTheme } from "@/context/ContextTheme";
 
 import Options from "./Options";
 import Image from "../image/Image";
 
 const NavContainer = styled.header`
   width: 100%;
-  background-color: red;
   height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 8px;
-  background: ${(props) => props.theme.backgroundDark};
+  background: ${(props) =>
+    props.isDark ? props.theme.backgroundDark : props.theme.backgroundLight};
 `;
 const ImageAlt = styled(Image)`
   z-index: 5;
 `;
+const Logo = styled.h3`
+  font-style: italic;
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+`;
 export default function Navigations() {
   const [isMenu, setIsMenu] = useState(false);
+  const { theme } = useTheme();
   return (
-    <NavContainer>
-      <h3 style={{ fontStyle: "italic", color: "#E2E3E3" }}>HelloVisit</h3>
+    <NavContainer isDark={theme === "dark" ? true : false}>
+      <Logo isDark={theme === "dark" ? true : false}>HelloVisit</Logo>
       {isMenu && <Options hasUser={true} />}
       <ImageAlt
         onClick={() => setIsMenu(!isMenu)}
-        image={isMenu ? "/x.png" : "/menu.png"}
+        isMenu={isMenu}
+        image={theme === "dark" ? "/menu.png" : "/menuLight.png"}
         alt=""
       />
     </NavContainer>
