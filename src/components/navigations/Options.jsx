@@ -58,7 +58,10 @@ const MenuColorContainer = styled.div`
   width: 100%;
   height: 100px;
   position: absolute;
-  background: ${(props) => props.theme.backgroundMenuDark};
+  background: ${(props) =>
+    props.isDark
+      ? props.theme.backgroundMenuDark
+      : props.theme.backgroundMenuLight};
   bottom: 11%;
   animation: ${(props) => (props.showOptions ? slideDown : slideUp)} 0.3s
     forwards;
