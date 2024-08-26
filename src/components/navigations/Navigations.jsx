@@ -26,9 +26,10 @@ const Logo = styled.h3`
 export default function Navigations() {
   const [isMenu, setIsMenu] = useState(false);
   const { theme } = useTheme();
+  const DarkCondition = theme === "dark" ? true : false;
   return (
-    <NavContainer isDark={theme === "dark" ? true : false}>
-      <Logo isDark={theme === "dark" ? true : false}>HelloVisit</Logo>
+    <NavContainer isDark={DarkCondition}>
+      <Logo isDark={DarkCondition}>HelloVisit</Logo>
       {isMenu && <Options hasUser={true} />}
       <ImageAlt
         onClick={() => setIsMenu(!isMenu)}

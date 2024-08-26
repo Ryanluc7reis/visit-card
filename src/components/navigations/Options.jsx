@@ -1,5 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
+
+import { useRouter } from "next/navigation";
 import { useTheme } from "@/context/ContextTheme";
 
 import Image from "../image/Image";
@@ -97,9 +99,10 @@ const Line = styled.div`
   background: #a3a3a379;
 `;
 export default function Options({ hasUser }) {
+  const router = useRouter();
   const [showSelectColor, setIsShowSelectColor] = useState(false);
   const { theme, toggleThemeLight, toggleThemeDark } = useTheme();
-
+  const DarkCondition = theme === "dark" ? true : false;
   return (
     <MenuContainer>
       {hasUser ? (
@@ -110,16 +113,18 @@ export default function Options({ hasUser }) {
           }}
         >
           <Option>Sobre nós</Option>
-          <Option>Editar meus links </Option>
-          <Option>Meus links</Option>
+          <Option onClick={() => router.push("/editprofile")}>
+            Meu perfil{" "}
+          </Option>
+          <Option onClick={() => router.push("/")}>Minha página</Option>
           <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
             Modo escuro
-            <h5 style={{ color: "#707070" }}>
+            <p style={{ color: "#707070", fontSize: "16px" }}>
               {theme === "dark" ? "Ativado" : "Desativado"}
-            </h5>
+            </p>
             {showSelectColor && (
               <MenuColorContainer
-                isDark={theme === "dark" ? true : false}
+                isDark={DarkCondition}
                 showOptions={showSelectColor}
               >
                 <OptionColor onClick={toggleThemeDark}>On</OptionColor>

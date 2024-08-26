@@ -43,7 +43,7 @@ const ImageLabel = styled(Image)`
   @media (min-width: 1024px) {
     left: 46%;
   }
-  @media (min-width: 1440px) {
+  @media (min-width: 1349px) {
     left: 47%;
   }
 `;
@@ -77,18 +77,19 @@ const Description = styled.h4`
 `;
 export default function About() {
   const { theme } = useTheme();
+  const DarkCondition = theme === "dark" ? true : false;
   return (
-    <AboutContainer isDark={theme === "dark" ? true : false}>
+    <AboutContainer isDark={DarkCondition}>
       <StyledFlexImages>
         <ImageAlt
-          isDark={theme === "dark" ? true : false}
+          isDark={DarkCondition}
           imageDark="share.png"
           image="shareLight.png"
           alt=""
         />
         <ImageLabel image="next.svg" />
         <ImageAlt
-          isDark={theme === "dark" ? true : false}
+          isDark={DarkCondition}
           imageDark="phone.png"
           image="phoneLight.png"
           alt=""
@@ -96,24 +97,20 @@ export default function About() {
       </StyledFlexImages>
 
       <StyledFlexDescription>
-        <NameAndLabel isDark={theme === "dark" ? true : false}>
-          Ryan Lucas
-        </NameAndLabel>
+        <NameAndLabel isDark={DarkCondition}>Ryan Lucas</NameAndLabel>
         <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
           <Image
-            isDark={theme === "dark" ? true : false}
+            isDark={DarkCondition}
             imageDark="map.png"
             image="mapLight.png"
             alt=""
           />
-          <Localization isDark={theme === "dark" ? true : false}>
+          <Localization isDark={DarkCondition}>
             Uberlândia - MG, Brasil
           </Localization>
         </div>
-        <NameAndLabel isDark={theme === "dark" ? true : false}>
-          HelloVisit
-        </NameAndLabel>
-        <Description isDark={theme === "dark" ? true : false}>
+        <NameAndLabel isDark={DarkCondition}>HelloVisit</NameAndLabel>
+        <Description isDark={DarkCondition}>
           {" "}
           A Hello te oferece o melhor cartao de visita do mercada,
           possibilitando você ter um certo acesso com aproximação
