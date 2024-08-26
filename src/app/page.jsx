@@ -37,16 +37,15 @@ const TitleSection = styled.h3`
 `;
 export default function Home() {
   const { theme } = useTheme();
+  const DarkCondition = theme === "dark" ? true : false;
   return (
     <>
       <Navigations />
-      <Container isDark={theme === "dark" ? true : false}>
+      <Container isDark={DarkCondition}>
         <About />
         <StyledFlexTitle>
-          <TitleSection isDark={theme === "dark" ? true : false}>
-            Redes Sociais
-          </TitleSection>
-          <Line isDark={theme === "dark" ? true : false} />
+          <TitleSection isDark={DarkCondition}>Redes Sociais</TitleSection>
+          <Line isDark={DarkCondition} />
         </StyledFlexTitle>
         <Link />
         <Link />
