@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useTheme } from "@/context/ContextTheme";
+import { useRouter } from "next/navigation";
 
 import Options from "./Options";
 import Image from "../image/Image";
@@ -25,11 +26,14 @@ const Logo = styled.h3`
 `;
 export default function Navigations() {
   const [isMenu, setIsMenu] = useState(false);
+  const router = useRouter();
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
   return (
     <NavContainer isDark={DarkCondition}>
-      <Logo isDark={DarkCondition}>HelloVisit</Logo>
+      <Logo onClick={() => router.push("/")} isDark={DarkCondition}>
+        HelloVisit
+      </Logo>
       {isMenu && <Options hasUser={true} />}
       <ImageAlt
         onClick={() => setIsMenu(!isMenu)}
