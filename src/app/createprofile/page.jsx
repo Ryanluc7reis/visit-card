@@ -58,7 +58,7 @@ const LinkItem = styled.div`
   }
 `;
 
-export default function CreateProfile() {
+export default function CreateProfilePage() {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
 

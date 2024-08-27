@@ -55,7 +55,7 @@ const HaveAccount = styled.h4`
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
 
-export default function EditProfile() {
+export default function LoginPage() {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
   const router = useRouter();
@@ -75,7 +75,7 @@ export default function EditProfile() {
           <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
             <HaveAccount isDark={DarkCondition}>Não possui conta ?</HaveAccount>
             <h4
-              onClick={() => router.push("/registeraccount")}
+              onClick={() => router.push("/register")}
               style={{ textDecoration: "underline" }}
             >
               Fazer cadastro

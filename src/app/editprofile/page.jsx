@@ -19,7 +19,7 @@ const Container = styled.div`
     props.isDark ? props.theme.backgroundDark : props.theme.backgroundLight};
 `;
 
-export default function EditProfile() {
+export default function EditProfilePage() {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
   return (
