@@ -77,7 +77,7 @@ export default function RegisterPage() {
             <HaveAccount isDark={DarkCondition}>Já possui conta ?</HaveAccount>
             <h4
               onClick={() => router.push("/login")}
-              style={{ textDecoration: "underline" }}
+              style={{ textDecoration: "underline", cursor: "pointer" }}
             >
               Entrar
             </h4>

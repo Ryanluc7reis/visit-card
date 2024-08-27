@@ -21,6 +21,7 @@ const ImageAlt = styled(Image)`
 `;
 const Logo = styled.h3`
   font-style: italic;
+  cursor: pointer;
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;

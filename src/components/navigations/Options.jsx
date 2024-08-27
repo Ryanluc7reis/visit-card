@@ -37,7 +37,7 @@ const Option = styled.h3`
 
   @media (min-width: 615px) {
     :hover {
-      background-color: ${(props) => props.theme.hoverDark};
+      background-color: ${(props) => props.theme.hoverLight};
     }
   }
 `;
@@ -149,6 +149,22 @@ export default function Options({ hasUser }) {
           <Option>Sobre nós</Option>
           <Option>Criar meus links</Option>
           {!hasUser && <Option>Cadastrar-se</Option>}
+          <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
+            Modo escuro
+            <p style={{ color: "#707070", fontSize: "16px" }}>
+              {theme === "dark" ? "Ativado" : "Desativado"}
+            </p>
+            {showSelectColor && (
+              <MenuColorContainer
+                isDark={DarkCondition}
+                showOptions={showSelectColor}
+              >
+                <OptionColor onClick={toggleThemeDark}>On</OptionColor>
+                <Line />
+                <OptionColor onClick={toggleThemeLight}>Off</OptionColor>
+              </MenuColorContainer>
+            )}
+          </OptionAlt>
           <Option onClick={() => router.push("/login")}>
             Entrar
             <Image image="/entrar.png" alt="" />

@@ -76,7 +76,7 @@ export default function LoginPage() {
             <HaveAccount isDark={DarkCondition}>Não possui conta ?</HaveAccount>
             <h4
               onClick={() => router.push("/register")}
-              style={{ textDecoration: "underline" }}
+              style={{ textDecoration: "underline", cursor: "pointer" }}
             >
               Fazer cadastro
             </h4>
