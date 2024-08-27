@@ -148,7 +148,11 @@ export default function Options({ hasUser }) {
           <Option>Comprar cartão</Option>
           <Option>Sobre nós</Option>
           <Option>Criar meus links</Option>
-          <Option>Me cadastrar</Option>
+          {!hasUser && <Option>Cadastrar-se</Option>}
+          <Option onClick={() => router.push("/login")}>
+            Entrar
+            <Image image="/entrar.png" alt="" />
+          </Option>
         </div>
       )}
     </MenuContainer>

@@ -34,7 +34,7 @@ export default function Navigations() {
       <Logo onClick={() => router.push("/")} isDark={DarkCondition}>
         HelloVisit
       </Logo>
-      {isMenu && <Options hasUser={true} />}
+      {isMenu && <Options hasUser={false} />}
       <ImageAlt
         onClick={() => setIsMenu(!isMenu)}
         isMenu={isMenu}
