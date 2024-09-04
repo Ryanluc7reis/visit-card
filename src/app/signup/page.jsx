@@ -3,8 +3,8 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
 import Navigations from "@/components/navigations/Navigations";
 import { Input } from "@/components/form/Input";
@@ -22,12 +22,11 @@ const Container = styled.div`
 `;
 const Form = styled.form`
   width: 90%;
-  min-height: 350px;
-  margin-top: 70px;
-  padding: 20px 0;
+  min-height: 470px;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
-  //justify-content: space-around;
+  justify-content: center;
   align-items: center;
   border-radius: 10px;
   background: ${(props) =>
@@ -41,20 +40,13 @@ const Form = styled.form`
 const InputAlt = styled(Input)`
   width: 250px;
   border-radius: 8px;
-  border: 2px solid
-    ${(props) => {
-      const isEmptyObject = (obj) => Object.keys(obj).length === 0;
-
-      if (props.error && !isEmptyObject(props.error)) {
-        return props.theme.error; // cor vermelha ou qualquer cor definida no tema
-      }
-
-      return props.isDark ? props.theme.borderDark : props.theme.borderLight;
-    }};
+  border: 1px solid
+    ${(props) =>
+      props.isDark ? props.theme.borderDark : props.theme.borderLight};
 `;
 const Title = styled.h3`
   font-weight: bold;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   text-align: center;
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
@@ -69,42 +61,29 @@ const ErrorMessage = styled.span`
   font-weight: bold;
   font-size: 13px;
 `;
-export default function LoginPage() {
+export default function SignupPage() {
   const { theme } = useTheme();
+  const API_URL = process.env.NEXT_PUBLIC_URL_API;
   const DarkCondition = theme === "dark" ? true : false;
   const router = useRouter();
+  const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    userOrEmail: "",
+    fullName: "",
+    user: "",
+    email: "",
     password: "",
   });
-  const [error, setError] = useState({});
-  const AUTH_NAME = process.env.SESSION_TOKEN_NAME;
-  const API_URL = process.env.NEXT_PUBLIC_URL_API;
-
-  const handleForm = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      const response = await axios.post(`${API_URL}/user/login`, formData);
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-    } catch (err) {
-      if (err.response && err.response.data === "password incorrect") {
-        setError({ ...error, password: "Senha incorreta" });
-      } else if (err.response && err.response.data === "not found") {
-        setError({ ...error, userOrEmail: "Usuário ou e-mail não encontrado" });
-      } else {
-        console.log("Erro desconhecido:", error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
+    if (name === "email") {
+      const isValidEmail = /\S+@\S+\.\S+/.test(value);
+      setError((prevErrors) => ({
+        ...prevErrors,
+        [name]: isValidEmail ? null : "Por favor digite um email válido.",
+      }));
+    }
     if (name) {
       const isValidValue = [!value];
       setError((prevErrors) => ({
@@ -112,10 +91,47 @@ export default function LoginPage() {
         [name]: isValidValue === true && null,
       }));
     }
+
     setFormData({
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleForm = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const { status } = await axios.post(`${API_URL}/user/signup`, formData);
+      if (status === 201) {
+        //setPopUpMessageSignup(true);
+        router.push("/");
+      }
+    } catch (err) {
+      if (err.response && err.response.data.duplicatedKey === "email") {
+        setError({
+          ...error,
+          email: "Já existe uma conta com esse email.",
+        });
+      } else if (err.response && err.response.data.duplicatedKey === "user") {
+        setError({
+          ...error,
+          user: "Já existe uma conta com esse usuário.",
+        });
+      } else {
+        const newErrors = {};
+        const requiredFields = ["fullName", "user", "email", "password"];
+        requiredFields.forEach((field) => {
+          if (!formData[field]) {
+            newErrors[field] = "Esse campo é obrigatório.";
+          }
+        });
+        setError(newErrors);
+        console.error("Erro ao cadastrar usuário:", err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -123,18 +139,34 @@ export default function LoginPage() {
       <Navigations />
       <Container isDark={DarkCondition}>
         <Form onSubmit={handleForm} isDark={DarkCondition}>
-          <Title isDark={DarkCondition}>Entrar na sua conta</Title>
+          <Title isDark={DarkCondition}>Cadastrar sua conta</Title>
           <InputAlt
-            label="Usuário ou e-mail"
-            placeholder="Usuário ou e-mail"
-            name="userOrEmail"
+            label="Nome completo"
+            placeholder="Nome completo"
+            name="fullName"
             onChange={handleChange}
-            value={formData.userOrEmail}
-            error={error.userOrEmail}
+            value={formData.fullName}
+            error={error.fullName}
           />
-          {error.userOrEmail && (
-            <ErrorMessage>{error.userOrEmail}</ErrorMessage>
-          )}
+          {error.fullName && <ErrorMessage>{error.fullName}</ErrorMessage>}
+          <InputAlt
+            label="Usuário"
+            placeholder="Usuário"
+            name="user"
+            onChange={handleChange}
+            value={formData.user}
+            error={error.user}
+          />
+          {error.user && <ErrorMessage>{error.user}</ErrorMessage>}
+          <InputAlt
+            label="E-mail"
+            placeholder="E-mail"
+            name="email"
+            onChange={handleChange}
+            value={formData.email}
+            error={error.email}
+          />
+          {error.email && <ErrorMessage>{error.email}</ErrorMessage>}
           <InputAlt
             label="Senha"
             placeholder="Senha"
@@ -149,7 +181,7 @@ export default function LoginPage() {
             style={{ width: "100%", textAlign: "center", marginTop: " 15px" }}
           >
             <Button type="submit" loading={loading}>
-              Entrar
+              Vamos lá
             </Button>
           </div>
           <div
@@ -157,15 +189,15 @@ export default function LoginPage() {
               display: "flex",
               gap: "4px",
               alignItems: "center",
-              marginTop: "10px",
+              marginTop: "7px",
             }}
           >
-            <HaveAccount isDark={DarkCondition}>Não possui conta ?</HaveAccount>
+            <HaveAccount isDark={DarkCondition}>Já possui conta ?</HaveAccount>
             <h4
-              onClick={() => router.push("/signup")}
+              onClick={() => router.push("/login")}
               style={{ textDecoration: "underline", cursor: "pointer" }}
             >
-              Fazer cadastro
+              Entrar
             </h4>
           </div>
         </Form>

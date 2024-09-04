@@ -23,7 +23,7 @@ const StyledButton = styled.button`
 export const Button = ({ children, disabled, loading, ...props }) => {
   return (
     <StyledButton disabled={disabled || loading} {...props}>
-      {children}
+      {loading ? <img src="loader.svg" width="15px" /> : children}
     </StyledButton>
   );
 };

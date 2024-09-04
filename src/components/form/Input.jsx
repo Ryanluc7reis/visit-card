@@ -17,8 +17,7 @@ const StyledInput = styled.input`
   width: 100%;
   padding: 10px;
   margin: 7px 0px;
-  color: ${(props) =>
-    props.isDark ? props.theme.textDark : props.theme.textLight};
+  color: ${(props) => props.theme.textLight};
   :focus {
     outline: none;
   }
