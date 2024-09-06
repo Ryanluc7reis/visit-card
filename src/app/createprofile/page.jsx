@@ -3,6 +3,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useTheme } from "@/context/ContextTheme";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import Navigations from "@/components/navigations/Navigations";
 import { Input } from "@/components/form/Input";
@@ -23,8 +25,8 @@ const Form = styled.form`
 `;
 const BoxContainer = styled.div`
   width: 90%;
-  min-height: 180px;
-  padding: 12px;
+  min-height: 200px;
+  padding: 18px;
   background: ${(props) =>
     props.isDark
       ? props.theme.backgroundContentDark
@@ -42,6 +44,8 @@ const InputAlt = styled(Input)`
   border: none;
   border-bottom: 1px solid
     ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
 
 const TitleSection = styled.h2`
@@ -60,69 +64,141 @@ const LinkItem = styled.div`
 
 export default function CreateProfilePage() {
   const { theme } = useTheme();
+  const router = useRouter();
+  const [error, setError] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [linksArray, setLinksArray] = useState([{ id: 1, app: "", url: "" }]);
+  const [formData, setFormData] = useState({
+    companyName: "",
+    location: "",
+    description: "",
+  });
+
   const DarkCondition = theme === "dark" ? true : false;
 
-  const [links, setLinks] = useState([{ id: 1, app: "", url: "" }]);
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
+  const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const configAuth = {
+    headers: {
+      [AUTH_NAME]: token,
+    },
+  };
+  const links = linksArray.map((link) => ({
+    app: link.app,
+    url: link.url,
+  }));
 
   const handleAddLink = () => {
-    setLinks([...links, { id: links.length + 1, app: "", url: "" }]);
+    setLinksArray([
+      ...linksArray,
+      { id: linksArray.length + 1, app: "", url: "" },
+    ]);
   };
 
   const handleRemoveLink = (id) => {
-    setLinks(links.filter((link) => link.id !== id));
+    setLinksArray(linksArray.filter((link) => link.id !== id));
   };
 
   const handleInputChange = (id, field, value) => {
-    setLinks(
-      links.map((link) => (link.id === id ? { ...link, [field]: value } : link))
+    setLinksArray(
+      linksArray.map((link) =>
+        link.id === id ? { ...link, [field]: value } : link
+      )
     );
   };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleForm = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const createLink = await axios.post(
+        `${API_URL}/card/createLink`,
+        { links },
+        configAuth
+      );
+
+      const createAbout = await axios.post(
+        `${API_URL}/card/createAbout`,
+        formData,
+        configAuth
+      );
+
+      if (createLink.status && createAbout.status === 201) {
+        router.push("/");
+      }
+    } catch (err) {
+      throw err.message;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <title>Crie seu perfil</title>
       <Navigations />
-      <Form isDark={DarkCondition}>
+      <Form onSubmit={handleForm} isDark={DarkCondition}>
         <TitleSection isDark={DarkCondition}>Crie seu sobre</TitleSection>
         <BoxContainer isDark={DarkCondition}>
-          <InputAlt
-            label="Nome"
-            placeholder="Seu nome"
-            isDark={DarkCondition}
-          />
           <InputAlt
             label="Nome ou @ da empresa"
             placeholder="Nome ou @ da empresa"
             isDark={DarkCondition}
+            name="companyName"
+            onChange={handleChange}
+            value={formData.companyName}
+          />
+          <InputAlt
+            label="Localização"
+            placeholder="Cidade, estado, país.."
+            isDark={DarkCondition}
+            name="location"
+            onChange={handleChange}
+            value={formData.location}
           />
           <InputAlt
             label="Descrição"
             placeholder="Descrição sobre a empresa"
             isDark={DarkCondition}
+            name="description"
+            onChange={handleChange}
+            value={formData.description}
           />
         </BoxContainer>
         <TitleSection isDark={DarkCondition}>Crie seus links</TitleSection>
         <BoxContainer isDark={DarkCondition}>
-          {links.map((link) => (
+          {linksArray.map((link) => (
             <LinkItem key={link.id}>
               <Selecter
                 label="Selecione seu aplicativo"
                 isDark={DarkCondition}
-                value={link.app}
+                name="app"
                 onChange={(e) =>
                   handleInputChange(link.id, "app", e.target.value)
                 }
+                value={link.app}
               />
               <div style={{ display: "flex", alignItems: "end" }}>
                 <InputAlt
-                  label="Seu Link"
+                  label="Seu link"
                   placeholder="Cole sua URL aqui"
                   isDark={DarkCondition}
+                  name="url"
                   value={link.url}
                   onChange={(e) =>
                     handleInputChange(link.id, "url", e.target.value)
                   }
                 />
-
                 <Image
                   isDark={DarkCondition}
                   imageDark="xDark.png"
@@ -141,7 +217,9 @@ export default function CreateProfilePage() {
             onClick={handleAddLink}
           />
         </BoxContainer>
-        <Button>Create profile</Button>
+        <Button type="submit" loading={loading}>
+          Create profile
+        </Button>
       </Form>
     </>
   );

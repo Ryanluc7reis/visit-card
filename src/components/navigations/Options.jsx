@@ -147,7 +147,9 @@ export default function Options({ hasUser }) {
         >
           <Option>Comprar cartão</Option>
           <Option>Sobre nós</Option>
-          <Option>Criar meus links</Option>
+          <Option onClick={() => router.push("/createprofile")}>
+            Criar meus links
+          </Option>
           {!hasUser && <Option>Cadastrar-se</Option>}
           <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
             Modo escuro
