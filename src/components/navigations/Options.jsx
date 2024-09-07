@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import { useRouter } from "next/navigation";
 import { useTheme } from "@/context/ContextTheme";
@@ -98,46 +99,102 @@ const Line = styled.div`
   height: 1px;
   background: #a3a3a379;
 `;
-export default function Options({ hasUser }) {
+
+const NameUser = styled.h2`
+  color: white;
+  margin-bottom: 15px;
+`;
+export default function Options({ hasUser, logOut }) {
   const router = useRouter();
-  const [showSelectColor, setIsShowSelectColor] = useState(false);
   const { theme, toggleThemeLight, toggleThemeDark } = useTheme();
+  const [showSelectColor, setIsShowSelectColor] = useState(false);
+  const [hasAbout, setHasAbout] = useState(null);
+
   const DarkCondition = theme === "dark" ? true : false;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
+  const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const configAuth = {
+    headers: {
+      [AUTH_NAME]: token,
+    },
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/user/logout`,
+        {},
+        configAuth
+      );
+      if (response.status === 200) {
+        logOut();
+      }
+    } catch (error) {
+      console.error("Erro durante o logout:", error);
+    }
+  };
+  const getAbout = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
+      const data = response.data;
+      setHasAbout(data.about[0]);
+    } catch (error) {
+      console.error("Erro ao obter os dados do cartão:", error);
+    }
+  };
+  useEffect(() => {
+    getAbout();
+  }, []);
+
   return (
     <MenuContainer>
       {hasUser ? (
-        <div
-          style={{
-            borderBottom: "1px solid #a3a3a379",
-            borderTop: "1px solid #a3a3a379",
-          }}
-        >
-          <Option>Sobre nós</Option>
-          <Option onClick={() => router.push("/editprofile")}>
-            Meu perfil{" "}
-          </Option>
-          <Option onClick={() => router.push("/")}>Minha página</Option>
-          <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
-            Modo escuro
-            <p style={{ color: "#707070", fontSize: "16px" }}>
-              {theme === "dark" ? "Ativado" : "Desativado"}
-            </p>
-            {showSelectColor && (
-              <MenuColorContainer
-                isDark={DarkCondition}
-                showOptions={showSelectColor}
-              >
-                <OptionColor onClick={toggleThemeDark}>On</OptionColor>
-                <Line />
-                <OptionColor onClick={toggleThemeLight}>Off</OptionColor>
-              </MenuColorContainer>
+        <>
+          <NameUser isDark={DarkCondition}>Olá, {hasUser}</NameUser>
+          <div
+            style={{
+              borderBottom: "1px solid #a3a3a379",
+              borderTop: "1px solid #a3a3a379",
+            }}
+          >
+            <Option>Sobre nós</Option>
+            {hasAbout !== null ? (
+              <>
+                <Option onClick={() => router.push("/editprofile")}>
+                  Editar perfil
+                </Option>
+                <Option onClick={() => router.push("/")}>Minha página</Option>
+              </>
+            ) : (
+              <Option onClick={() => router.push("/createprofile")}>
+                Criar meus links
+              </Option>
             )}
-          </OptionAlt>
-          <Option style={{ color: "red" }}>
-            <Image image="/sair.png" alt="" />
-            Sair
-          </Option>
-        </div>
+
+            <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
+              Modo escuro
+              <p style={{ color: "#707070", fontSize: "16px" }}>
+                {theme === "dark" ? "Ativado" : "Desativado"}
+              </p>
+              {showSelectColor && (
+                <MenuColorContainer
+                  isDark={DarkCondition}
+                  showOptions={showSelectColor}
+                >
+                  <OptionColor onClick={toggleThemeDark}>On</OptionColor>
+                  <Line />
+                  <OptionColor onClick={toggleThemeLight}>Off</OptionColor>
+                </MenuColorContainer>
+              )}
+            </OptionAlt>
+            <Option onClick={handleLogout} style={{ color: "red" }}>
+              <Image image="/sair.png" alt="" />
+              Sair
+            </Option>
+          </div>
+        </>
       ) : (
         <div
           style={{
@@ -147,10 +204,7 @@ export default function Options({ hasUser }) {
         >
           <Option>Comprar cartão</Option>
           <Option>Sobre nós</Option>
-          <Option onClick={() => router.push("/createprofile")}>
-            Criar meus links
-          </Option>
-          {!hasUser && <Option>Cadastrar-se</Option>}
+          <Option onClick={() => router.push("/signup")}>Cadastrar-se</Option>
           <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
             Modo escuro
             <p style={{ color: "#707070", fontSize: "16px" }}>
