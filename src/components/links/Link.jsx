@@ -36,13 +36,13 @@ const NameLink = styled.h4`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
-export default function Link() {
+export default function Link({ url, app }) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
   return (
     <LinkContainer isDark={DarkCondition}>
       <ImageAlt image="insta.png" alt="" />
-      <NameLink isDark={DarkCondition}>Instagram</NameLink>
+      <NameLink isDark={DarkCondition}>{app || "Instagram"}</NameLink>
       <Image
         isDark={DarkCondition}
         imageDark="right-arrowDark.png"

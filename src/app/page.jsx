@@ -2,10 +2,13 @@
 
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import Navigations from "@/components/navigations/Navigations";
 import About from "@/components/about/About";
 import Link from "@/components/links/Link";
+import React from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -37,19 +40,50 @@ const TitleSection = styled.h3`
 `;
 export default function Home() {
   const { theme } = useTheme();
+  const [aboutData, setAboutData] = useState(null);
+  const [linksData, setlinksData] = useState([]);
+
   const DarkCondition = theme === "dark" ? true : false;
+  const API_URL = process.env.NEXT_PUBLIC_URL_API;
+
+  const getCard = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/card/lucas1`);
+      const data = response.data;
+      setAboutData(data.about[0]);
+      setlinksData(data.links[0].links);
+    } catch (error) {
+      console.error("Erro ao obter os dados do cartão:", error);
+    }
+  };
+  useEffect(() => {
+    getCard();
+  }, []);
+
   return (
     <>
       <Navigations />
       <Container isDark={DarkCondition}>
-        <About />
+        {aboutData !== null && (
+          <>
+            <About
+              id={aboutData._id}
+              name={aboutData.name}
+              companyName={aboutData.companyName}
+              location={aboutData.location}
+              description={aboutData.description}
+            />
+          </>
+        )}
+
         <StyledFlexTitle>
           <TitleSection isDark={DarkCondition}>Redes Sociais</TitleSection>
           <Line isDark={DarkCondition} />
         </StyledFlexTitle>
-        <Link />
-        <Link />
-        <Link />
+        {linksData.length > 0 &&
+          linksData.map((link) => (
+            <Link key={link._id} app={link.app} url={link.url} />
+          ))}
       </Container>
     </>
   );

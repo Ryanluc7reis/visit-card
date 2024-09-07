@@ -75,7 +75,7 @@ const Description = styled.h4`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
-export default function About() {
+export default function About({name,companyName,location,description}) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
   return (
@@ -97,7 +97,7 @@ export default function About() {
       </StyledFlexImages>
 
       <StyledFlexDescription>
-        <NameAndLabel isDark={DarkCondition}>Ryan Lucas</NameAndLabel>
+        <NameAndLabel isDark={DarkCondition}>{name}</NameAndLabel>
         <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
           <Image
             isDark={DarkCondition}
@@ -106,14 +106,12 @@ export default function About() {
             alt=""
           />
           <Localization isDark={DarkCondition}>
-            Uberlândia - MG, Brasil
+           {location}
           </Localization>
         </div>
-        <NameAndLabel isDark={DarkCondition}>HelloVisit</NameAndLabel>
+        <NameAndLabel isDark={DarkCondition}>{companyName}</NameAndLabel>
         <Description isDark={DarkCondition}>
-          {" "}
-          A Hello te oferece o melhor cartao de visita do mercada,
-          possibilitando você ter um certo acesso com aproximação
+         {description}
         </Description>
       </StyledFlexDescription>
     </AboutContainer>
