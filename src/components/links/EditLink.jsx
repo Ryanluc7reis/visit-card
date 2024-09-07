@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
 import { useState } from "react";
+import axios from "axios";
 
 import { Input } from "../form/Input";
 import { Button } from "../form/Button";
@@ -29,13 +30,7 @@ const InputAlt = styled(Input)`
   border-bottom: 1px solid
     ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
 `;
-const Title = styled.h3`
-  font-weight: bold;
-  margin: 7px 0;
-  text-align: center;
-  color: ${(props) =>
-    props.isDark ? props.theme.textDark : props.theme.textLight};
-`;
+
 const LinkItem = styled.div`
   display: flex;
   gap: 10px;
@@ -47,66 +42,87 @@ const LinkItem = styled.div`
   }
 `;
 
-export default function EditLink() {
+export default function EditLink({ id, linkId, app, url, onSave }) {
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    id: id,
+    linkId: linkId,
+    url: url,
+    app: app,
+  });
+
   const DarkCondition = theme === "dark" ? true : false;
-
-  const [links, setLinks] = useState([{ id: 1, app: "", url: "" }]);
-
-  const handleAddLink = () => {
-    setLinks([...links, { id: links.length + 1, app: "", url: "" }]);
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
+  const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const configAuth = {
+    headers: {
+      [AUTH_NAME]: token,
+    },
+  };
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const handleRemoveLink = (id) => {
-    setLinks(links.filter((link) => link.id !== id));
+  const handleFormSaveEdit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { status } = await axios.patch(
+        `${API_URL}/card/editLink`,
+        formData,
+        configAuth
+      );
+      if (status === 200) {
+        onSave();
+        alert("Conteúdo editado com sucesso");
+        // setPopUpMessage(true);
+      }
+    } catch (err) {
+      console.error(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleInputChange = (id, field, value) => {
-    setLinks(
-      links.map((link) => (link.id === id ? { ...link, [field]: value } : link))
-    );
-  };
   return (
-    <Form isDark={DarkCondition}>
-      <Title isDark={DarkCondition}> Detalhes sobre seus links</Title>
-
-      {links.map((link) => (
-        <LinkItem key={link.id}>
-          <Selecter
-            label="Aplicativo"
+    <Form onSubmit={handleFormSaveEdit} isDark={DarkCondition}>
+      <LinkItem>
+        <Selecter
+          label="Aplicativo"
+          isDark={DarkCondition}
+          name="app"
+          value={formData.app}
+          onChange={handleChange}
+        />
+        <div style={{ display: "flex", alignItems: "end" }}>
+          <InputAlt
+            label="Link"
             isDark={DarkCondition}
-            value={link.app}
-            onChange={(e) => handleInputChange(link.id, "app", e.target.value)}
+            name="url"
+            value={formData.url}
+            onChange={handleChange}
           />
-          <div style={{ display: "flex", alignItems: "end" }}>
-            <InputAlt
-              label="Link"
-              isDark={DarkCondition}
-              value={link.url}
-              onChange={(e) =>
-                handleInputChange(link.id, "url", e.target.value)
-              }
-            />
 
-            <Image
-              isDark={DarkCondition}
-              imageDark="xDark.png"
-              image="xLight.png"
-              alt=""
-              onClick={() => handleRemoveLink(link.id)}
-            />
-          </div>
-        </LinkItem>
-      ))}
-      <Image
-        isDark={DarkCondition}
-        imageDark="plusDark.png"
-        image="plusLight.png"
-        alt=""
-        onClick={handleAddLink}
-      />
+          <Image
+            isDark={DarkCondition}
+            imageDark="xDark.png"
+            image="xLight.png"
+            alt=""
+          />
+        </div>
+      </LinkItem>
+
       <div style={{ width: "100%", textAlign: "center" }}>
-        <Button onClick={(e) => e.preventDefault()}>Salvar alterações</Button>
+        <Button type="submit" loading={loading}>
+          Salvar alterações
+        </Button>
       </div>
     </Form>
   );

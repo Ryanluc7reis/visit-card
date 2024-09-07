@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
 
-import Image from "../image/Image";
-
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -34,12 +32,12 @@ export const Selecter = ({ label, ...props }) => {
   return (
     <StyledContainer {...props}>
       <StyledLabel isDark={DarkCondition}>{label}</StyledLabel>
-      <StyledSelect>
-        <option>Instagram</option>
-        <option>Whatsapp</option>
-        <option>Facebook</option>
-        <option>Telegram</option>
-        <option>Linkedin</option>
+      <StyledSelect {...props}>
+        <option value="Instagram">Instagram</option>
+        <option value="Whatsapp">Whatsapp</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Telegram">Telegram</option>
+        <option value="Linkedin">Linkedin</option>
       </StyledSelect>
     </StyledContainer>
   );
