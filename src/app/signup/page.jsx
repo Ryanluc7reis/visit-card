@@ -22,7 +22,7 @@ const Container = styled.div`
 `;
 const Form = styled.form`
   width: 90%;
-  min-height: 470px;
+  min-height: 540px;
   margin-top: 40px;
   display: flex;
   flex-direction: column;
@@ -69,7 +69,8 @@ export default function SignupPage() {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     user: "",
     email: "",
     password: "",
@@ -141,14 +142,23 @@ export default function SignupPage() {
         <Form onSubmit={handleForm} isDark={DarkCondition}>
           <Title isDark={DarkCondition}>Cadastrar sua conta</Title>
           <InputAlt
-            label="Nome completo"
-            placeholder="Nome completo"
-            name="fullName"
+            label="Primeiro nome"
+            placeholder="Primeiro nome"
+            name="firstName"
             onChange={handleChange}
-            value={formData.fullName}
-            error={error.fullName}
+            value={formData.firstName}
+            error={error.firstName}
           />
-          {error.fullName && <ErrorMessage>{error.fullName}</ErrorMessage>}
+          {error.firstName && <ErrorMessage>{error.firstName}</ErrorMessage>}
+          <InputAlt
+            label="Último nome"
+            placeholder="Último nome"
+            name="lastName"
+            onChange={handleChange}
+            value={formData.lastName}
+            error={error.lastName}
+          />
+          {error.lastName && <ErrorMessage>{error.lastName}</ErrorMessage>}
           <InputAlt
             label="Usuário"
             placeholder="Usuário"

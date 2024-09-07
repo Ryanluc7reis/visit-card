@@ -71,16 +71,17 @@ const ErrorMessage = styled.span`
 `;
 export default function LoginPage() {
   const { theme } = useTheme();
-  const DarkCondition = theme === "dark" ? true : false;
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({});
   const [formData, setFormData] = useState({
     userOrEmail: "",
     password: "",
   });
-  const [error, setError] = useState({});
-  const AUTH_NAME = process.env.SESSION_TOKEN_NAME;
+
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const DarkCondition = theme === "dark" ? true : false;
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -89,6 +90,9 @@ export default function LoginPage() {
       const response = await axios.post(`${API_URL}/user/login`, formData);
       const { token } = response.data;
       localStorage.setItem("token", token);
+      if (response.status === 200) {
+        router.push("/");
+      }
     } catch (err) {
       if (err.response && err.response.data === "password incorrect") {
         setError({ ...error, password: "Senha incorreta" });
