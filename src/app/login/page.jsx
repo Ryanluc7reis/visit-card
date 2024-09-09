@@ -128,7 +128,7 @@ export default function LoginPage() {
     setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
-  }, []);
+  }, [showPopUp]);
 
   return (
     <>

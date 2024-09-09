@@ -82,7 +82,7 @@ export default function EditProfilePage() {
     setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
-  }, []);
+  }, [showPopUp]);
 
   return (
     <>

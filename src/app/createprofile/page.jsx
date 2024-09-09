@@ -155,7 +155,7 @@ export default function CreateProfilePage() {
     setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
-  }, []);
+  }, [showPopUp]);
 
   return (
     <>
