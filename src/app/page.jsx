@@ -51,7 +51,7 @@ export default function Home() {
 
   const getCard = async () => {
     try {
-      const response = await axios.get(`${API_URL}/card/lucas1`);
+      const response = await axios.get(`${API_URL}/card/ryan1`);
       const data = response.data;
       setAboutData(data.about[0]);
       setlinksData(data.links[0].links);

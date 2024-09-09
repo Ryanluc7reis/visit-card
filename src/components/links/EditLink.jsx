@@ -64,6 +64,15 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
       [AUTH_NAME]: token,
     },
   };
+  const configAuthToDelete = {
+    headers: {
+      [AUTH_NAME]: token,
+    },
+    data: {
+      id: id,
+      linkId: linkId,
+    },
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -95,6 +104,26 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
       setLoading(false);
     }
   };
+  const handleDeleteLink = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { status } = await axios.delete(
+        `${API_URL}/card/deleteLink`,
+        configAuthToDelete
+      );
+      if (status === 200) {
+        onSave();
+        setShowPopUp(true);
+        setMessageType("deleted");
+      }
+    } catch (err) {
+      console.error(err.message);
+
+      setShowPopUp(true);
+      setMessageType("error");
+    }
+  };
 
   return (
     <Form onSubmit={handleFormSaveEdit} isDark={DarkCondition}>
@@ -120,6 +149,7 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
             imageDark="xDark.png"
             image="xLight.png"
             alt=""
+            onClick={handleDeleteLink}
           />
         </div>
       </LinkItem>
