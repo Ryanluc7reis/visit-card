@@ -2,6 +2,7 @@
 
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
+import { usePopUp } from "@/context/ContextPopUp";
 import { useSWRConfig } from "swr";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -9,8 +10,8 @@ import axios from "axios";
 import Navigations from "@/components/navigations/Navigations";
 import EditAbout from "@/components/about/EditAbout";
 import EditLink from "@/components/links/EditLink";
-import { Button } from "@/components/form/Button";
 import Image from "@/components/image/Image";
+import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -33,6 +34,7 @@ const Title = styled.h3`
 `;
 export default function EditProfilePage() {
   const { theme } = useTheme();
+  const { showPopUp, messageType, setShowPopUp } = usePopUp();
   const { mutate } = useSWRConfig();
   const [aboutData, setAboutData] = useState(null);
   const [linksData, setlinksData] = useState([]);
@@ -77,10 +79,20 @@ export default function EditProfilePage() {
   useEffect(() => {
     getAbout();
     getLinks();
+    setTimeout(() => {
+      setShowPopUp(false);
+    }, 2500);
   }, []);
 
   return (
     <>
+      {showPopUp && (
+        <PopUpMessage error={messageType === "error" ? true : false}>
+          {messageType === "deleted" && "Link deletado com sucesso"}
+          {messageType === "edited" && "Perfil editado com sucesso"}
+          {messageType === "error" && "Algo deu errado"}
+        </PopUpMessage>
+      )}
       <Navigations />
       <Container isDark={DarkCondition}>
         <Title isDark={DarkCondition}> Detalhes de sobre </Title>

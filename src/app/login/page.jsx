@@ -2,13 +2,15 @@
 
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
+import { usePopUp } from "@/context/ContextPopUp";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Navigations from "@/components/navigations/Navigations";
 import { Input } from "@/components/form/Input";
 import { Button } from "@/components/form/Button";
+import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -71,6 +73,7 @@ const ErrorMessage = styled.span`
 `;
 export default function LoginPage() {
   const { theme } = useTheme();
+  const { messageType, showPopUp, setShowPopUp } = usePopUp();
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -121,9 +124,20 @@ export default function LoginPage() {
       [name]: value,
     });
   };
+  useEffect(() => {
+    setTimeout(() => {
+      setShowPopUp(false);
+    }, 2500);
+  }, []);
 
   return (
     <>
+      {showPopUp && messageType && (
+        <PopUpMessage error={messageType === "error" ? true : false}>
+          {messageType === "createdUser" && "Conta criada com sucesso"}
+          {messageType === "error" && "Algo deu errado"}
+        </PopUpMessage>
+      )}
       <Navigations />
       <Container isDark={DarkCondition}>
         <Form onSubmit={handleForm} isDark={DarkCondition}>

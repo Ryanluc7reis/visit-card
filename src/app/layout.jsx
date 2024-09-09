@@ -1,6 +1,7 @@
 "use client";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { ContextThemeProvider } from "@/context/ContextTheme";
+import { ContextPopUpProvider } from "@/context/ContextPopUp";
 
 import { theme } from "../theme";
 
@@ -17,12 +18,14 @@ const GlobalStyles = createGlobalStyle`
 export default function RootLayout({ children }) {
   return (
     <html>
-      <ContextThemeProvider>
-        <ThemeProvider theme={theme}>
-          <GlobalStyles />
-          <body suppressHydrationWarning={true}>{children}</body>
-        </ThemeProvider>
-      </ContextThemeProvider>
+      <ContextPopUpProvider>
+        <ContextThemeProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <body suppressHydrationWarning={true}>{children}</body>
+          </ThemeProvider>
+        </ContextThemeProvider>
+      </ContextPopUpProvider>
     </html>
   );
 }

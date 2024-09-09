@@ -2,6 +2,7 @@
 
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
+import { usePopUp } from "@/context/ContextPopUp";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
@@ -63,6 +64,7 @@ const ErrorMessage = styled.span`
 `;
 export default function SignupPage() {
   const { theme } = useTheme();
+  const { setShowPopUp, setMessageType } = usePopUp();
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
   const DarkCondition = theme === "dark" ? true : false;
   const router = useRouter();
@@ -105,8 +107,9 @@ export default function SignupPage() {
       setLoading(true);
       const { status } = await axios.post(`${API_URL}/user/signup`, formData);
       if (status === 201) {
-        //setPopUpMessageSignup(true);
-        router.push("/");
+        setShowPopUp(true);
+        setMessageType("createdUser");
+        router.push("/login");
       }
     } catch (err) {
       if (err.response && err.response.data.duplicatedKey === "email") {
@@ -129,6 +132,8 @@ export default function SignupPage() {
         });
         setError(newErrors);
         console.error("Erro ao cadastrar usuário:", err.message);
+        setShowPopUp(true);
+        setMessageType("error");
       }
     } finally {
       setLoading(false);

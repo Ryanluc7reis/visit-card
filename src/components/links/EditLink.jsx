@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
+import { usePopUp } from "@/context/ContextPopUp";
 import { useState } from "react";
 import axios from "axios";
 
@@ -44,6 +45,7 @@ const LinkItem = styled.div`
 
 export default function EditLink({ id, linkId, app, url, onSave }) {
   const { theme } = useTheme();
+  const { setShowPopUp, setMessageType } = usePopUp();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     id: id,
@@ -81,11 +83,14 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
       );
       if (status === 200) {
         onSave();
-        alert("Conteúdo editado com sucesso");
-        // setPopUpMessage(true);
+        setShowPopUp(true);
+        setMessageType("edited");
       }
     } catch (err) {
       console.error(err.message);
+
+      setShowPopUp(true);
+      setMessageType("error");
     } finally {
       setLoading(false);
     }

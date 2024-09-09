@@ -3,6 +3,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useTheme } from "@/context/ContextTheme";
+import { usePopUp } from "@/context/ContextPopUp";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -11,6 +12,7 @@ import { Input } from "@/components/form/Input";
 import { Selecter } from "@/components/form/Selecter";
 import { Button } from "@/components/form/Button";
 import Image from "@/components/image/Image";
+import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 
 const Form = styled.form`
   width: 100%;
@@ -64,6 +66,7 @@ const LinkItem = styled.div`
 
 export default function CreateProfilePage() {
   const { theme } = useTheme();
+  const { showPopUp, setShowPopUp, setMessageType, messageType } = usePopUp();
   const router = useRouter();
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
@@ -135,16 +138,32 @@ export default function CreateProfilePage() {
 
       if (createLink.status && createAbout.status === 201) {
         router.push("/");
+        setShowPopUp(true);
+        setMessageType("createdProfile");
       }
     } catch (err) {
+      setShowPopUp(true);
+      setMessageType("error");
       throw err.message;
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    getAbout();
+    getLinks();
+    setTimeout(() => {
+      setShowPopUp(false);
+    }, 2500);
+  }, []);
 
   return (
     <>
+      {showPopUp && (
+        <PopUpMessage error={messageType === "error" ? true : false}>
+          {messageType === "error" && "Algo deu errado"}
+        </PopUpMessage>
+      )}
       <title>Crie seu perfil</title>
       <Navigations />
       <Form onSubmit={handleForm} isDark={DarkCondition}>

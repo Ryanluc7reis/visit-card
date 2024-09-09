@@ -2,12 +2,14 @@
 
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
+import { usePopUp } from "@/context/ContextPopUp";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Navigations from "@/components/navigations/Navigations";
 import About from "@/components/about/About";
 import Link from "@/components/links/Link";
+import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 import React from "react";
 
 const Container = styled.div`
@@ -40,6 +42,7 @@ const TitleSection = styled.h3`
 `;
 export default function Home() {
   const { theme } = useTheme();
+  const { messageType, showPopUp, setShowPopUp, setMessageType } = usePopUp();
   const [aboutData, setAboutData] = useState(null);
   const [linksData, setlinksData] = useState([]);
 
@@ -58,10 +61,21 @@ export default function Home() {
   };
   useEffect(() => {
     getCard();
+    setTimeout(() => {
+      setShowPopUp(false);
+    }, 2500);
   }, []);
 
   return (
     <>
+      {showPopUp && (
+        <PopUpMessage error={messageType === "error" ? true : false}>
+          {messageType === "createdUser" && "Conta criada com sucesso"}
+          {messageType === "createdProfile" && "Perfil criado com sucesso"}
+          {messageType === "error" && "Algo deu errado"}
+        </PopUpMessage>
+      )}
+
       <Navigations />
       <Container isDark={DarkCondition}>
         {aboutData !== null && (
