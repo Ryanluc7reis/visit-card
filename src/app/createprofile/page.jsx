@@ -68,7 +68,7 @@ export default function CreateProfilePage() {
   const { theme } = useTheme();
   const { showPopUp, setShowPopUp, setMessageType, messageType } = usePopUp();
   const router = useRouter();
-  const [error, setError] = useState({});
+
   const [loading, setLoading] = useState(false);
   const [linksArray, setLinksArray] = useState([{ id: 1, app: "", url: "" }]);
   const [formData, setFormData] = useState({
@@ -142,7 +142,10 @@ export default function CreateProfilePage() {
         setMessageType("createdProfile");
       }
     } catch (err) {
-      if (err.response.data.message === "Token não fornecido") {
+      if (
+        err.response.data.message === "Token não fornecido" ||
+        "Falha ao autenticar token"
+      ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
       } else {
@@ -180,7 +183,8 @@ export default function CreateProfilePage() {
     <>
       {showPopUp && (
         <PopUpMessage
-          error={messageType === "error" || "notAuthenticated" ? true : false}
+          error={messageType === "error" ? true : false}
+          error2={messageType === "notAuthenticated" ? true : false}
         >
           {messageType === "notAuthenticated" && "Usuário não autenticado"}
           {messageType === "error" && "Algo deu errado"}

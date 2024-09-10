@@ -86,7 +86,10 @@ export default function EditAbout({
         setMessageType("edited");
       }
     } catch (err) {
-      if (err.response.data.message === "Token não fornecido") {
+      if (
+        err.response.data.message === "Token não fornecido" ||
+        "Falha ao autenticar token"
+      ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
       } else {

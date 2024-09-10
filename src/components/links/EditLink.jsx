@@ -96,7 +96,10 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
         setMessageType("edited");
       }
     } catch (err) {
-      if (err.response.data.message === "Token não fornecido") {
+      if (
+        err.response.data.message === "Token não fornecido" ||
+        "Falha ao autenticar token"
+      ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
       } else {
@@ -109,7 +112,6 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
   };
   const handleDeleteLink = async (e) => {
     e.preventDefault();
-
     try {
       const { status } = await axios.delete(
         `${API_URL}/card/deleteLink`,
@@ -121,13 +123,18 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
         setMessageType("deleted");
       }
     } catch (err) {
-      if (err.response.data.message === "Token não fornecido") {
+      if (
+        err.response.data.message === "Token não fornecido" ||
+        "Falha ao autenticar token"
+      ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
       } else {
         setShowPopUp(true);
         setMessageType("error");
       }
+    } finally {
+      onSave();
     }
   };
 

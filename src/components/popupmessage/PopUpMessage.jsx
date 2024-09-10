@@ -63,14 +63,15 @@ const slideDown = keyframes`
 const Img = styled.img`
   padding: 1px;
 `;
-export default function PopUpMessage({ error, children, ...props }) {
+export default function PopUpMessage({ error, error2, children, ...props }) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
+
   return (
     <>
       <BoxMessage isDark={DarkCondition} {...props} request>
         {children}
-        {error ? <Img src="error.png" /> : <Img src="/check.png" />}
+        {error || error2 ? <Img src="error.png" /> : <Img src="/check.png" />}
       </BoxMessage>
     </>
   );
