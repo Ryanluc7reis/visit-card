@@ -46,8 +46,16 @@ const InputAlt = styled(Input)`
   background: transparent;
   width: 100%;
   border: none;
-  border-bottom: 1px solid
-    ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
+  border-bottom: 2px solid
+    ${(props) => {
+      const isEmptyObject = (obj) => Object.keys(obj).length === 0;
+
+      if (props.error && !isEmptyObject(props.error)) {
+        return props.theme.error;
+      }
+
+      return props.isDark ? props.theme.textDark : props.theme.textDark;
+    }};
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
@@ -80,6 +88,11 @@ const LinkItem = styled.div`
     gap: 78px;
   }
 `;
+const ErrorMessage = styled.span`
+  color: ${(props) => props.theme.error};
+  font-weight: bold;
+  font-size: 13px;
+`;
 
 export default function CreateProfilePage() {
   const { theme } = useTheme();
@@ -88,6 +101,7 @@ export default function CreateProfilePage() {
 
   const [loading, setLoading] = useState(false);
   const [loadingScreen, setLoadingScreen] = useState(true);
+  const [error, setError] = useState({});
   const [linksArray, setLinksArray] = useState([{ id: 1, app: "", url: "" }]);
   const [formData, setFormData] = useState({
     companyName: "",
@@ -132,6 +146,14 @@ export default function CreateProfilePage() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
+    if (name) {
+      const isValidValue = [!value];
+      setError((prevErrors) => ({
+        ...prevErrors,
+        [name]: isValidValue === true && null,
+      }));
+    }
     setFormData({
       ...formData,
       [name]: value,
@@ -166,10 +188,16 @@ export default function CreateProfilePage() {
       ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
-      } else {
-        setShowPopUp(true);
-        setMessageType("error");
       }
+      if (err.response.data.errors[0].message) {
+        setError({
+          ...error,
+          location: err.response.data.errors[0].message,
+        });
+      }
+      setShowPopUp(true);
+      setMessageType("error");
+
       throw err.message;
     } finally {
       setLoading(false);
@@ -220,7 +248,7 @@ export default function CreateProfilePage() {
         <BoxContainer isDark={DarkCondition}>
           <InputAlt
             label="Nome ou @ da empresa"
-            placeholder="Nome ou @ da empresa"
+            placeholder="Hello visit"
             isDark={DarkCondition}
             name="companyName"
             onChange={handleChange}
@@ -229,16 +257,18 @@ export default function CreateProfilePage() {
           />
           <InputAlt
             label="Localização"
-            placeholder="Cidade, estado, país.."
+            placeholder="Uberlândia-MG, Brasil"
             isDark={DarkCondition}
             name="location"
             onChange={handleChange}
             value={formData.location}
+            error={error.location}
             required
           />
+          {error.location && <ErrorMessage>{error.location}</ErrorMessage>}
           <InputAlt
             label="Descrição"
-            placeholder="Descrição sobre a empresa"
+            placeholder="Hello visit é uma empresa..."
             isDark={DarkCondition}
             name="description"
             onChange={handleChange}
