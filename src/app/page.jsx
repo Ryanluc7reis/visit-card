@@ -10,7 +10,7 @@ import Navigations from "@/components/navigations/Navigations";
 import About from "@/components/about/About";
 import Link from "@/components/links/Link";
 import PopUpMessage from "@/components/popupmessage/PopUpMessage";
-import React from "react";
+import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
 
 const Container = styled.div`
   width: 100%;
@@ -45,6 +45,7 @@ export default function Home() {
   const { messageType, showPopUp, setShowPopUp, setMessageType } = usePopUp();
   const [aboutData, setAboutData] = useState(null);
   const [linksData, setlinksData] = useState([]);
+  const [loadingScreen, setLoadingScreen] = useState(true);
 
   const DarkCondition = theme === "dark" ? true : false;
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
@@ -61,10 +62,15 @@ export default function Home() {
   };
   useEffect(() => {
     getCard();
+    setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
     }, 3500);
   }, []);
+
+  if (loadingScreen) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -79,16 +85,14 @@ export default function Home() {
 
       <Navigations />
       <Container isDark={DarkCondition}>
-        {aboutData !== null && (
-          <>
-            <About
-              id={aboutData._id}
-              name={aboutData.name}
-              companyName={aboutData.companyName}
-              location={aboutData.location}
-              description={aboutData.description}
-            />
-          </>
+        {aboutData && (
+          <About
+            id={aboutData._id}
+            name={aboutData.name}
+            companyName={aboutData.companyName}
+            location={aboutData.location}
+            description={aboutData.description}
+          />
         )}
 
         <StyledFlexTitle>

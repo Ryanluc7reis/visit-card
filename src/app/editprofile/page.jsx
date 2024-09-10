@@ -12,6 +12,7 @@ import EditAbout from "@/components/about/EditAbout";
 import EditLink from "@/components/links/EditLink";
 import Image from "@/components/image/Image";
 import PopUpMessage from "@/components/popupmessage/PopUpMessage";
+import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
 
 const Container = styled.div`
   width: 100%;
@@ -36,7 +37,9 @@ export default function EditProfilePage() {
   const { theme } = useTheme();
   const { showPopUp, messageType, setShowPopUp, setMessageType } = usePopUp();
   const { mutate } = useSWRConfig();
+
   const [aboutData, setAboutData] = useState(null);
+  const [loadingScreen, setLoadingScreen] = useState(true);
   const [linksData, setlinksData] = useState([]);
   const [linkId, setLinkId] = useState(null);
   const [newLinks, setNewLinks] = useState([{ app: "-", url: "-" }]);
@@ -112,10 +115,15 @@ export default function EditProfilePage() {
   useEffect(() => {
     getAbout();
     getLinks();
+    setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
   }, [showPopUp]);
+
+  if (loadingScreen) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -134,7 +142,7 @@ export default function EditProfilePage() {
       <Navigations />
       <Container isDark={DarkCondition}>
         <Title isDark={DarkCondition}> Detalhes de sobre </Title>
-        {aboutData !== null && (
+        {aboutData && (
           <>
             <EditAbout
               id={aboutData._id}

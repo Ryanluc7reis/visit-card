@@ -13,6 +13,7 @@ import { Selecter } from "@/components/form/Selecter";
 import { Button } from "@/components/form/Button";
 import Image from "@/components/image/Image";
 import PopUpMessage from "@/components/popupmessage/PopUpMessage";
+import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
 
 const Form = styled.form`
   width: 100%;
@@ -27,7 +28,7 @@ const Form = styled.form`
 `;
 const BoxContainer = styled.div`
   width: 90%;
-  min-height: 200px;
+  min-height: 180px;
   padding: 18px;
   background: ${(props) =>
     props.isDark
@@ -70,6 +71,7 @@ export default function CreateProfilePage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [loadingScreen, setLoadingScreen] = useState(true);
   const [linksArray, setLinksArray] = useState([{ id: 1, app: "", url: "" }]);
   const [formData, setFormData] = useState({
     companyName: "",
@@ -174,10 +176,15 @@ export default function CreateProfilePage() {
   };
   useEffect(() => {
     getAbout();
+    setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
   }, [showPopUp]);
+
+  if (loadingScreen) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

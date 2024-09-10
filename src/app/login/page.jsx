@@ -11,6 +11,7 @@ import Navigations from "@/components/navigations/Navigations";
 import { Input } from "@/components/form/Input";
 import { Button } from "@/components/form/Button";
 import PopUpMessage from "@/components/popupmessage/PopUpMessage";
+import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
 
 const Container = styled.div`
   width: 100%;
@@ -29,7 +30,6 @@ const Form = styled.form`
   padding: 20px 0;
   display: flex;
   flex-direction: column;
-  //justify-content: space-around;
   align-items: center;
   border-radius: 10px;
   background: ${(props) =>
@@ -48,7 +48,7 @@ const InputAlt = styled(Input)`
       const isEmptyObject = (obj) => Object.keys(obj).length === 0;
 
       if (props.error && !isEmptyObject(props.error)) {
-        return props.theme.error; // cor vermelha ou qualquer cor definida no tema
+        return props.theme.error;
       }
 
       return props.isDark ? props.theme.borderDark : props.theme.borderLight;
@@ -77,6 +77,7 @@ export default function LoginPage() {
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [loadingScreen, setLoadingScreen] = useState(true);
   const [error, setError] = useState({});
   const [formData, setFormData] = useState({
     userOrEmail: "",
@@ -125,10 +126,15 @@ export default function LoginPage() {
     });
   };
   useEffect(() => {
+    setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
   }, [showPopUp]);
+
+  if (loadingScreen) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

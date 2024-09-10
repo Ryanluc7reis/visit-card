@@ -5,11 +5,12 @@ import { useTheme } from "@/context/ContextTheme";
 import { usePopUp } from "@/context/ContextPopUp";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Navigations from "@/components/navigations/Navigations";
 import { Input } from "@/components/form/Input";
 import { Button } from "@/components/form/Button";
+import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
 
 const Container = styled.div`
   width: 100%;
@@ -69,6 +70,7 @@ export default function SignupPage() {
   const DarkCondition = theme === "dark" ? true : false;
   const router = useRouter();
   const [error, setError] = useState({});
+  const [loadingScreen, setLoadingScreen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -139,6 +141,12 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    setLoadingScreen(false);
+  }, []);
+  if (loadingScreen) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
