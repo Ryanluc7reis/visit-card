@@ -34,12 +34,16 @@ const Title = styled.h3`
 `;
 export default function EditProfilePage() {
   const { theme } = useTheme();
-  const { showPopUp, messageType, setShowPopUp } = usePopUp();
+  const { showPopUp, messageType, setShowPopUp, setMessageType } = usePopUp();
   const { mutate } = useSWRConfig();
   const [aboutData, setAboutData] = useState(null);
   const [linksData, setlinksData] = useState([]);
   const [linkId, setLinkId] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [newLinks, setNewLinks] = useState([{ app: "-", url: "-" }]);
+  const links = newLinks.map((link) => ({
+    app: link.app,
+    url: link.url,
+  }));
 
   const DarkCondition = theme === "dark" ? true : false;
   const token =
@@ -56,6 +60,35 @@ export default function EditProfilePage() {
     mutate(`${API_URL}/card/getAbout`);
     mutate(`${API_URL}/card/getLinks`);
   };
+  const handleCreateLink = async (e) => {
+    e.preventDefault();
+    try {
+      const createLink = await axios.post(
+        `${API_URL}/card/createLink`,
+        { links },
+        configAuth
+      );
+
+      if (createLink.status === 201) {
+        handleSaveEditCard();
+        setMessageType("created");
+        setShowPopUp(true);
+      }
+    } catch (err) {
+      if (
+        err.response.data.message === "Token não fornecido" ||
+        "Falha ao autenticar token"
+      ) {
+        setShowPopUp(true);
+        setMessageType("notAuthenticated");
+      } else {
+        setShowPopUp(true);
+        setMessageType("error");
+      }
+      throw err.message;
+    }
+  };
+
   const getAbout = async () => {
     try {
       const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
@@ -88,8 +121,10 @@ export default function EditProfilePage() {
     <>
       {showPopUp && (
         <PopUpMessage
-          error={messageType === "error" || "notAuthenticated" ? true : false}
+          error={messageType === "error" ? true : false}
+          error2={messageType === "notAuthenticated" ? true : false}
         >
+          {messageType === "created" && "Link criado com sucesso"}
           {messageType === "notAuthenticated" && "Usuário não autenticado"}
           {messageType === "deleted" && "Link deletado com sucesso"}
           {messageType === "edited" && "Perfil editado com sucesso"}
@@ -129,6 +164,7 @@ export default function EditProfilePage() {
           imageDark="plusDark.png"
           image="plusLight.png"
           alt=""
+          onClick={handleCreateLink}
         />
       </Container>
     </>
