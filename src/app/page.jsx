@@ -63,13 +63,14 @@ export default function Home() {
     getCard();
     setTimeout(() => {
       setShowPopUp(false);
-    }, 2500);
+    }, 3500);
   }, []);
 
   return (
     <>
       {showPopUp && (
         <PopUpMessage error={messageType === "error" ? true : false}>
+          {messageType === "hasProfile" && "Você já possui um perfil"}
           {messageType === "createdUser" && "Conta criada com sucesso"}
           {messageType === "createdProfile" && "Perfil criado com sucesso"}
           {messageType === "error" && "Algo deu errado"}

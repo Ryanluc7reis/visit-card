@@ -79,15 +79,20 @@ export default function EditAbout({
         formData,
         configAuth
       );
+
       if (status === 200) {
         onSave();
         setShowPopUp(true);
         setMessageType("edited");
       }
     } catch (err) {
-      console.error(err.message);
-      setShowPopUp(true);
-      setMessageType("error");
+      if (err.response.data.message === "Token não fornecido") {
+        setShowPopUp(true);
+        setMessageType("notAuthenticated");
+      } else {
+        setShowPopUp(true);
+        setMessageType("error");
+      }
     } finally {
       setLoading(false);
     }

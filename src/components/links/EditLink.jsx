@@ -96,10 +96,13 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
         setMessageType("edited");
       }
     } catch (err) {
-      console.error(err.message);
-
-      setShowPopUp(true);
-      setMessageType("error");
+      if (err.response.data.message === "Token não fornecido") {
+        setShowPopUp(true);
+        setMessageType("notAuthenticated");
+      } else {
+        setShowPopUp(true);
+        setMessageType("error");
+      }
     } finally {
       setLoading(false);
     }
@@ -118,10 +121,13 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
         setMessageType("deleted");
       }
     } catch (err) {
-      console.error(err.message);
-
-      setShowPopUp(true);
-      setMessageType("error");
+      if (err.response.data.message === "Token não fornecido") {
+        setShowPopUp(true);
+        setMessageType("notAuthenticated");
+      } else {
+        setShowPopUp(true);
+        setMessageType("error");
+      }
     }
   };
 

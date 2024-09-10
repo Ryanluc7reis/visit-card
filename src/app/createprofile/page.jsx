@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "@/context/ContextTheme";
 import { usePopUp } from "@/context/ContextPopUp";
 import { useRouter } from "next/navigation";
@@ -142,16 +142,35 @@ export default function CreateProfilePage() {
         setMessageType("createdProfile");
       }
     } catch (err) {
-      setShowPopUp(true);
-      setMessageType("error");
+      if (err.response.data.message === "Token não fornecido") {
+        setShowPopUp(true);
+        setMessageType("notAuthenticated");
+      } else {
+        setShowPopUp(true);
+        setMessageType("error");
+      }
       throw err.message;
     } finally {
       setLoading(false);
     }
   };
+  const getAbout = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
+      const data = response.data;
+      if (data) {
+        router.push("/");
+        setTimeout(() => {
+          setMessageType("hasProfile");
+          setShowPopUp(true);
+        }, 500);
+      }
+    } catch (error) {
+      console.error("Erro ao obter os dados do cartão:", error);
+    }
+  };
   useEffect(() => {
     getAbout();
-    getLinks();
     setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
@@ -160,7 +179,10 @@ export default function CreateProfilePage() {
   return (
     <>
       {showPopUp && (
-        <PopUpMessage error={messageType === "error" ? true : false}>
+        <PopUpMessage
+          error={messageType === "error" || "notAuthenticated" ? true : false}
+        >
+          {messageType === "notAuthenticated" && "Usuário não autenticado"}
           {messageType === "error" && "Algo deu errado"}
         </PopUpMessage>
       )}
@@ -176,6 +198,7 @@ export default function CreateProfilePage() {
             name="companyName"
             onChange={handleChange}
             value={formData.companyName}
+            required
           />
           <InputAlt
             label="Localização"
@@ -184,6 +207,7 @@ export default function CreateProfilePage() {
             name="location"
             onChange={handleChange}
             value={formData.location}
+            required
           />
           <InputAlt
             label="Descrição"
@@ -192,6 +216,7 @@ export default function CreateProfilePage() {
             name="description"
             onChange={handleChange}
             value={formData.description}
+            required
           />
         </BoxContainer>
         <TitleSection isDark={DarkCondition}>Crie seus links</TitleSection>
@@ -206,6 +231,7 @@ export default function CreateProfilePage() {
                   handleInputChange(link.id, "app", e.target.value)
                 }
                 value={link.app}
+                required
               />
               <div style={{ display: "flex", alignItems: "end" }}>
                 <InputAlt
@@ -217,6 +243,7 @@ export default function CreateProfilePage() {
                   onChange={(e) =>
                     handleInputChange(link.id, "url", e.target.value)
                   }
+                  required
                 />
                 <Image
                   isDark={DarkCondition}

@@ -87,7 +87,10 @@ export default function EditProfilePage() {
   return (
     <>
       {showPopUp && (
-        <PopUpMessage error={messageType === "error" ? true : false}>
+        <PopUpMessage
+          error={messageType === "error" || "notAuthenticated" ? true : false}
+        >
+          {messageType === "notAuthenticated" && "Usuário não autenticado"}
           {messageType === "deleted" && "Link deletado com sucesso"}
           {messageType === "edited" && "Perfil editado com sucesso"}
           {messageType === "error" && "Algo deu errado"}
