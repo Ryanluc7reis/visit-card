@@ -28,18 +28,35 @@ const Form = styled.form`
 const InputAlt = styled(Input)`
   background: transparent;
   border: none;
+  width: 165px;
   border-bottom: 1px solid
     ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+`;
+const InputLink = styled(InputAlt)`
+  @media (min-width: 425px) {
+    width: 200px;
+  }
+  @media (min-width: 570px) {
+    width: 347px;
+  }
+  @media (min-width: 768px) {
+    width: 367px;
+  }
 `;
 
 const LinkItem = styled.div`
   display: flex;
-  gap: 10px;
-  align-items: end;
+
   margin-bottom: 10px;
-  @media (min-width: 428px) {
-    align-items: center;
-    justify-content: space-between;
+  gap: 15px;
+  @media (min-width: 425px) {
+    gap: 25px;
+  }
+
+  @media (min-width: 768px) {
+    gap: 78px;
   }
 `;
 
@@ -149,7 +166,7 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
           onChange={handleChange}
         />
         <div style={{ display: "flex", alignItems: "end" }}>
-          <InputAlt
+          <InputLink
             label="Link"
             isDark={DarkCondition}
             name="url"

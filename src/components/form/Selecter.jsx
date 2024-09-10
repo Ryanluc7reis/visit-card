@@ -6,12 +6,17 @@ const StyledContainer = styled.div`
   flex-direction: column;
 `;
 const StyledSelect = styled.select`
-  padding: 10px;
   width: 112px;
   height: 47px;
   color: #474747c2;
   font-weight: 600;
   border-radius: 7px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid
+    ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
   font-size: 15px;
   :focus {
     outline: none;
@@ -25,6 +30,14 @@ const StyledLabel = styled.p`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
+const StyledOption = styled.option`
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+  background: ${(props) =>
+    props.isDark
+      ? props.theme.backgroundContentDark
+      : props.theme.backgroundContentLight};
+`;
 
 export const Selecter = ({ label, ...props }) => {
   const { theme } = useTheme();
@@ -32,12 +45,22 @@ export const Selecter = ({ label, ...props }) => {
   return (
     <StyledContainer {...props}>
       <StyledLabel isDark={DarkCondition}>{label}</StyledLabel>
-      <StyledSelect {...props}>
-        <option value="Instagram">Instagram</option>
-        <option value="Whatsapp">Whatsapp</option>
-        <option value="Facebook">Facebook</option>
-        <option value="Telegram">Telegram</option>
-        <option value="Linkedin">Linkedin</option>
+      <StyledSelect isDark={DarkCondition} {...props}>
+        <StyledOption isDark={DarkCondition} value="Instagram">
+          Instagram
+        </StyledOption>
+        <StyledOption isDark={DarkCondition} value="Whatsapp">
+          Whatsapp
+        </StyledOption>
+        <StyledOption isDark={DarkCondition} value="Facebook">
+          Facebook
+        </StyledOption>
+        <StyledOption isDark={DarkCondition} value="Telegram">
+          Telegram
+        </StyledOption>
+        <StyledOption isDark={DarkCondition} value="Linkedin">
+          Linkedin
+        </StyledOption>
       </StyledSelect>
     </StyledContainer>
   );

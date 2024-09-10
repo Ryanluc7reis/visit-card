@@ -29,7 +29,7 @@ const Form = styled.form`
 const BoxContainer = styled.div`
   width: 90%;
   min-height: 180px;
-  padding: 18px;
+  padding: 10px;
   background: ${(props) =>
     props.isDark
       ? props.theme.backgroundContentDark
@@ -44,11 +44,23 @@ const BoxContainer = styled.div`
 `;
 const InputAlt = styled(Input)`
   background: transparent;
+  width: 100%;
   border: none;
   border-bottom: 1px solid
     ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
+`;
+const InputLink = styled(InputAlt)`
+  @media (min-width: 425px) {
+    width: 200px;
+  }
+  @media (min-width: 570px) {
+    width: 347px;
+  }
+  @media (min-width: 768px) {
+    width: 367px;
+  }
 `;
 
 const TitleSection = styled.h2`
@@ -57,11 +69,15 @@ const TitleSection = styled.h2`
 `;
 const LinkItem = styled.div`
   display: flex;
-  align-items: end;
+  width: 100%;
   margin-bottom: 10px;
-  @media (min-width: 428px) {
-    align-items: center;
-    justify-content: space-between;
+  gap: 15px;
+  @media (min-width: 425px) {
+    gap: 25px;
+  }
+
+  @media (min-width: 768px) {
+    gap: 78px;
   }
 `;
 
@@ -244,8 +260,10 @@ export default function CreateProfilePage() {
                 value={link.app}
                 required
               />
-              <div style={{ display: "flex", alignItems: "end" }}>
-                <InputAlt
+              <div
+                style={{ display: "flex", alignItems: "end", width: "100%" }}
+              >
+                <InputLink
                   label="Seu link"
                   placeholder="Cole sua URL aqui"
                   isDark={DarkCondition}
@@ -261,7 +279,7 @@ export default function CreateProfilePage() {
                   imageDark="xDark.png"
                   image="xLight.png"
                   alt=""
-                  onClick={() => handleRemoveLink(link.id)}
+                  onClick={handleRemoveLink}
                 />
               </div>
             </LinkItem>
