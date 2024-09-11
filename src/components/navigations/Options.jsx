@@ -13,7 +13,7 @@ const MenuContainer = styled.header`
   left: 0;
   position: fixed;
   min-height: 100vh;
-  background-color: ${(props) => props.theme.backgroundMenuDark};
+  background-color: ${(props) => props.theme.backgroundDark};
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -22,7 +22,7 @@ const MenuContainer = styled.header`
   z-index: 5;
 `;
 const Option = styled.h3`
-  color: white;
+  color: ${(props) => props.theme.textDark};
   gap: 6px;
   display: flex;
   align-items: center;
@@ -47,9 +47,11 @@ const OptionAlt = styled(Option)`
 `;
 const OptionColor = styled.p`
   font-size: 16px;
-  color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.textDark};
   padding: 14px 10px;
-
   @media (min-width: 768px) {
     :hover {
       cursor: pointer;
@@ -61,14 +63,12 @@ const MenuColorContainer = styled.div`
   width: 100%;
   height: 100px;
   position: absolute;
-  background: ${(props) =>
-    props.isDark
-      ? props.theme.backgroundMenuDark
-      : props.theme.backgroundMenuLight};
+  background-color: ${(props) => props.theme.backgroundDark};
   bottom: 11%;
   animation: ${(props) => (props.showOptions ? slideDown : slideUp)} 0.3s
     forwards;
   transform-origin: top;
+  border-bottom: 1px solid #a3a3a379;
   @media (min-width: 1300px) {
     bottom: 17%;
   }
@@ -99,7 +99,10 @@ const Line = styled.div`
   height: 1px;
   background: #a3a3a379;
 `;
-
+const ImageAlt = styled(Image)`
+  position: absolute;
+  right: 38%;
+`;
 const NameUser = styled.h2`
   color: white;
   margin-bottom: 15px;
@@ -149,7 +152,7 @@ export default function Options({ hasUser, logOut }) {
   }, []);
 
   return (
-    <MenuContainer>
+    <MenuContainer isDark={DarkCondition}>
       {hasUser ? (
         <>
           <NameUser isDark={DarkCondition}>Olá, {hasUser}</NameUser>
@@ -159,21 +162,32 @@ export default function Options({ hasUser, logOut }) {
               borderTop: "1px solid #a3a3a379",
             }}
           >
-            <Option>Sobre nós</Option>
+            <Option isDark={DarkCondition}>Sobre nós</Option>
             {hasAbout !== null ? (
               <>
-                <Option onClick={() => router.push("/editprofile")}>
+                <Option
+                  isDark={DarkCondition}
+                  onClick={() => router.push("/editprofile")}
+                >
                   Editar perfil
                 </Option>
-                <Option onClick={() => router.push("/")}>Minha página</Option>
+                <Option isDark={DarkCondition} onClick={() => router.push("/")}>
+                  Minha página
+                </Option>
               </>
             ) : (
-              <Option onClick={() => router.push("/createprofile")}>
+              <Option
+                isDark={DarkCondition}
+                onClick={() => router.push("/createprofile")}
+              >
                 Criar meus links
               </Option>
             )}
 
-            <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
+            <OptionAlt
+              isDark={DarkCondition}
+              onClick={() => setIsShowSelectColor(!showSelectColor)}
+            >
               Modo escuro
               <p style={{ color: "#707070", fontSize: "16px" }}>
                 {theme === "dark" ? "Ativado" : "Desativado"}
@@ -183,13 +197,28 @@ export default function Options({ hasUser, logOut }) {
                   isDark={DarkCondition}
                   showOptions={showSelectColor}
                 >
-                  <OptionColor onClick={toggleThemeDark}>On</OptionColor>
+                  <OptionColor isDark={DarkCondition} onClick={toggleThemeDark}>
+                    On
+                    {theme === "dark" && <ImageAlt image="/check.png" alt="" />}
+                  </OptionColor>
                   <Line />
-                  <OptionColor onClick={toggleThemeLight}>Off</OptionColor>
+                  <OptionColor
+                    isDark={DarkCondition}
+                    onClick={toggleThemeLight}
+                  >
+                    Off
+                    {theme === "light" && (
+                      <ImageAlt image="/check.png" alt="" />
+                    )}
+                  </OptionColor>
                 </MenuColorContainer>
               )}
             </OptionAlt>
-            <Option onClick={handleLogout} style={{ color: "red" }}>
+            <Option
+              isDark={DarkCondition}
+              onClick={handleLogout}
+              style={{ color: "red" }}
+            >
               <Image image="/sair.png" alt="" />
               Sair
             </Option>
@@ -202,10 +231,15 @@ export default function Options({ hasUser, logOut }) {
             borderTop: "1px solid #a3a3a379",
           }}
         >
-          <Option>Comprar cartão</Option>
-          <Option>Sobre nós</Option>
-          <Option onClick={() => router.push("/signup")}>Cadastrar-se</Option>
-          <OptionAlt onClick={() => setIsShowSelectColor(!showSelectColor)}>
+          <Option isDark={DarkCondition}>Comprar cartão</Option>
+          <Option isDark={DarkCondition}>Sobre nós</Option>
+          <Option isDark={DarkCondition} onClick={() => router.push("/signup")}>
+            Cadastrar-se
+          </Option>
+          <OptionAlt
+            isDark={DarkCondition}
+            onClick={() => setIsShowSelectColor(!showSelectColor)}
+          >
             Modo escuro
             <p style={{ color: "#707070", fontSize: "16px" }}>
               {theme === "dark" ? "Ativado" : "Desativado"}
@@ -215,13 +249,19 @@ export default function Options({ hasUser, logOut }) {
                 isDark={DarkCondition}
                 showOptions={showSelectColor}
               >
-                <OptionColor onClick={toggleThemeDark}>On</OptionColor>
+                <OptionColor isDark={DarkCondition} onClick={toggleThemeDark}>
+                  On
+                  {theme === "dark" && <ImageAlt image="/check.png" alt="" />}
+                </OptionColor>
                 <Line />
-                <OptionColor onClick={toggleThemeLight}>Off</OptionColor>
+                <OptionColor isDark={DarkCondition} onClick={toggleThemeLight}>
+                  Off
+                  {theme === "light" && <ImageAlt image="/check.png" alt="" />}
+                </OptionColor>
               </MenuColorContainer>
             )}
           </OptionAlt>
-          <Option onClick={() => router.push("/login")}>
+          <Option isDark={DarkCondition} onClick={() => router.push("/login")}>
             Entrar
             <Image image="/entrar.png" alt="" />
           </Option>
