@@ -11,6 +11,7 @@ import Navigations from "@/components/navigations/Navigations";
 import { Input } from "@/components/form/Input";
 import { Button } from "@/components/form/Button";
 import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
+import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 
 const Container = styled.div`
   width: 100%;
@@ -42,9 +43,16 @@ const Form = styled.form`
 const InputAlt = styled(Input)`
   width: 250px;
   border-radius: 8px;
-  border: 1px solid
-    ${(props) =>
-      props.isDark ? props.theme.borderDark : props.theme.borderLight};
+  border: 2px solid
+    ${(props) => {
+      const isEmptyObject = (obj) => Object.keys(obj).length === 0;
+
+      if (props.error && !isEmptyObject(props.error)) {
+        return props.theme.error;
+      }
+
+      return props.isDark ? props.theme.borderDark : props.theme.borderDark;
+    }};
 `;
 const Title = styled.h3`
   font-weight: bold;
@@ -65,7 +73,7 @@ const ErrorMessage = styled.span`
 `;
 export default function SignupPage() {
   const { theme } = useTheme();
-  const { setShowPopUp, setMessageType } = usePopUp();
+  const { setShowPopUp, setMessageType, showPopUp, messageType } = usePopUp();
   const router = useRouter();
 
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
@@ -84,13 +92,7 @@ export default function SignupPage() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name === "email") {
-      const isValidEmail = /\S+@\S+\.\S+/.test(value);
-      setError((prevErrors) => ({
-        ...prevErrors,
-        [name]: isValidEmail ? null : "Por favor digite um email válido.",
-      }));
-    }
+
     if (name) {
       const isValidValue = [!value];
       setError((prevErrors) => ({
@@ -116,7 +118,13 @@ export default function SignupPage() {
         router.push("/login");
       }
     } catch (err) {
-      if (err.response && err.response.data.duplicatedKey === "email") {
+      if (err.response.data.errors[0].type === "string.empty") {
+        const field = err.response.data.errors[0].field;
+        setError({
+          ...error,
+          [field]: "Este campo é obrigatório",
+        });
+      } else if (err.response && err.response.data.duplicatedKey === "email") {
         setError({
           ...error,
           email: "Já existe uma conta com esse email.",
@@ -126,23 +134,20 @@ export default function SignupPage() {
           ...error,
           user: "Já existe uma conta com esse usuário.",
         });
-      } else {
-        const newErrors = {};
-        const requiredFields = ["fullName", "user", "email", "password"];
-        requiredFields.forEach((field) => {
-          if (!formData[field]) {
-            newErrors[field] = "Esse campo é obrigatório.";
-          }
+      } else if (err.response.data.errors) {
+        const field = err.response.data.errors[0].field;
+        setError({
+          ...error,
+          [field]: err.response.data.errors[0].message,
         });
-        setError(newErrors);
-        console.error("Erro ao cadastrar usuário:", err.message);
-        setShowPopUp(true);
-        setMessageType("error");
       }
+      setShowPopUp(true);
+      setMessageType("error");
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     setLoadingScreen(false);
   }, []);
@@ -152,13 +157,19 @@ export default function SignupPage() {
 
   return (
     <>
+      {showPopUp && messageType && (
+        <PopUpMessage error={messageType === "error" ? true : false}>
+          {messageType === "createdUser" && "Conta criada com sucesso"}
+          {messageType === "error" && "Algo deu errado"}
+        </PopUpMessage>
+      )}
       <Navigations />
       <Container isDark={DarkCondition}>
         <Form onSubmit={handleForm} isDark={DarkCondition}>
           <Title isDark={DarkCondition}>Cadastrar sua conta</Title>
           <InputAlt
-            label="Primeiro nome"
-            placeholder="Primeiro nome"
+            label="Nome"
+            placeholder="Nome"
             name="firstName"
             onChange={handleChange}
             value={formData.firstName}
@@ -166,8 +177,8 @@ export default function SignupPage() {
           />
           {error.firstName && <ErrorMessage>{error.firstName}</ErrorMessage>}
           <InputAlt
-            label="Último nome"
-            placeholder="Último nome"
+            label="Sobrenome"
+            placeholder="Sobrenome"
             name="lastName"
             onChange={handleChange}
             value={formData.lastName}
