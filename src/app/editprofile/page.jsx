@@ -42,6 +42,7 @@ export default function EditProfilePage() {
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [linksData, setlinksData] = useState([]);
   const [linkId, setLinkId] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [newLinks, setNewLinks] = useState([{ app: "-", url: "-" }]);
   const links = newLinks.map((link) => ({
     app: link.app,
@@ -58,6 +59,7 @@ export default function EditProfilePage() {
       [AUTH_NAME]: token,
     },
   };
+  const fullName = userData && userData.fullName;
 
   const handleSaveEditCard = () => {
     mutate(`${API_URL}/card/getAbout`);
@@ -111,7 +113,22 @@ export default function EditProfilePage() {
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
+  const verifyUser = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/user/verify-session`,
+        configAuth
+      );
+
+      const data = response.data;
+      setUserData(data);
+    } catch (error) {
+      console.error("Erro ao verificar sessão:", error);
+      setUserData(false);
+    }
+  };
   useEffect(() => {
+    verifyUser();
     getAbout();
     getLinks();
     setLoadingScreen(false);
@@ -138,6 +155,7 @@ export default function EditProfilePage() {
           {messageType === "error" && "Algo deu errado"}
         </PopUpMessage>
       )}
+      <title>{fullName && `Editando perfil / ${fullName} `}</title>
       <Navigations />
       <Container isDark={DarkCondition}>
         <Title isDark={DarkCondition}> Detalhes de sobre </Title>

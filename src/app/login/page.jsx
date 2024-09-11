@@ -146,6 +146,7 @@ export default function LoginPage() {
           {messageType === "error" && "Algo deu errado"}
         </PopUpMessage>
       )}
+      <title>Entrar</title>
       <Navigations />
       <Container isDark={DarkCondition}>
         <Form onSubmit={handleForm} isDark={DarkCondition}>

@@ -198,7 +198,7 @@ export default function CreateProfilePage() {
       setShowPopUp(true);
       setMessageType("error");
 
-      console.error( err.message)
+      console.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -241,7 +241,7 @@ export default function CreateProfilePage() {
           {messageType === "error" && "Algo deu errado"}
         </PopUpMessage>
       )}
-      <title>Crie seu perfil</title>
+      <title>Novo perfil</title>
       <Navigations />
       <Form onSubmit={handleForm} isDark={DarkCondition}>
         <TitleSection isDark={DarkCondition}>Crie seu sobre</TitleSection>

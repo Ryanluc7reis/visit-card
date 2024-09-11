@@ -46,9 +46,19 @@ export default function Home() {
   const [aboutData, setAboutData] = useState(null);
   const [linksData, setlinksData] = useState([]);
   const [loadingScreen, setLoadingScreen] = useState(true);
+  const [userData, setUserData] = useState(null);
 
   const DarkCondition = theme === "dark" ? true : false;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const configAuth = {
+    headers: {
+      [AUTH_NAME]: token,
+    },
+  };
+  const fullName = userData && userData.fullName;
 
   const getCard = async () => {
     try {
@@ -60,8 +70,24 @@ export default function Home() {
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
+  const verifyUser = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/user/verify-session`,
+        configAuth
+      );
+
+      const data = response.data;
+      setUserData(data);
+    } catch (error) {
+      console.error("Erro ao verificar sessão:", error);
+      setUserData(false);
+    }
+  };
+
   useEffect(() => {
     getCard();
+    verifyUser();
     setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
@@ -82,7 +108,7 @@ export default function Home() {
           {messageType === "error" && "Algo deu errado"}
         </PopUpMessage>
       )}
-
+      <title>{fullName ? `HelloVisit / ${fullName}` : `HelloVisit `}</title>
       <Navigations />
       <Container isDark={DarkCondition}>
         {aboutData && (

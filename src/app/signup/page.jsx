@@ -150,7 +150,10 @@ export default function SignupPage() {
 
   useEffect(() => {
     setLoadingScreen(false);
-  }, []);
+    setTimeout(() => {
+      setShowPopUp(false);
+    }, 2500);
+  }, [showPopUp]);
   if (loadingScreen) {
     return <LoadingScreen />;
   }
@@ -163,6 +166,7 @@ export default function SignupPage() {
           {messageType === "error" && "Algo deu errado"}
         </PopUpMessage>
       )}
+      <title>Novo cadastro</title>
       <Navigations />
       <Container isDark={DarkCondition}>
         <Form onSubmit={handleForm} isDark={DarkCondition}>
