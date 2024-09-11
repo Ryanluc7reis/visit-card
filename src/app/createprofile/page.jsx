@@ -198,7 +198,7 @@ export default function CreateProfilePage() {
       setShowPopUp(true);
       setMessageType("error");
 
-      throw err.message;
+      console.error( err.message)
     } finally {
       setLoading(false);
     }

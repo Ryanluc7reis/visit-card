@@ -84,11 +84,10 @@ export default function EditProfilePage() {
       ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
-      } else {
-        setShowPopUp(true);
-        setMessageType("error");
       }
-      throw err.message;
+      console.erro(err.message);
+      setShowPopUp(true);
+      setMessageType("error");
     }
   };
 

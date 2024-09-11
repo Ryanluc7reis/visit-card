@@ -66,9 +66,11 @@ const ErrorMessage = styled.span`
 export default function SignupPage() {
   const { theme } = useTheme();
   const { setShowPopUp, setMessageType } = usePopUp();
+  const router = useRouter();
+
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
   const DarkCondition = theme === "dark" ? true : false;
-  const router = useRouter();
+
   const [error, setError] = useState({});
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [loading, setLoading] = useState(false);

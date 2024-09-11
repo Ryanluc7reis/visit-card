@@ -73,7 +73,7 @@ const ErrorMessage = styled.span`
 `;
 export default function LoginPage() {
   const { theme } = useTheme();
-  const { messageType, showPopUp, setShowPopUp } = usePopUp();
+  const { messageType, showPopUp, setShowPopUp, setMessageType } = usePopUp();
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -103,7 +103,9 @@ export default function LoginPage() {
       } else if (err.response && err.response.data === "not found") {
         setError({ ...error, userOrEmail: "Usuário ou e-mail não encontrado" });
       } else {
-        console.log("Erro desconhecido:", error.message);
+        console.error("Erro ao fazer autenticação do usuário:", err.message);
+        setShowPopUp(true);
+        setMessageType("error");
       }
     } finally {
       setLoading(false);
