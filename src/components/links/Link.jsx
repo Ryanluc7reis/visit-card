@@ -28,9 +28,12 @@ const LinkContainer = styled.div`
     width: 600px;
   }
 `;
-const ImageAlt = styled(Image)`
+const ImageByWidth = styled(Image)`
   width: 45px;
   height: 45px;
+`;
+const ImageByPadding = styled(Image)`
+  padding: 1px;
 `;
 const NameLink = styled.h4`
   color: ${(props) =>
@@ -41,8 +44,14 @@ export default function Link({ url, app }) {
   const DarkCondition = theme === "dark" ? true : false;
   return (
     <LinkContainer isDark={DarkCondition}>
-      <ImageAlt image="insta.png" alt="" />
-      <NameLink isDark={DarkCondition}>{app || "Instagram"}</NameLink>
+      {app === "Instagram" && <ImageByWidth image="instagram.png" alt="" />}
+      {app === "Whatsapp" && <ImageByWidth image="whatsapp.png" alt="" />}
+      {app === "Facebook" && <ImageByPadding image="facebook.png" alt="" />}
+      {app === "Telegram" && <ImageByPadding image="telegram.png" alt="" />}
+      {app === "Linkedin" && <ImageByPadding image="linkedin.png" alt="" />}
+
+      <NameLink isDark={DarkCondition}>{app}</NameLink>
+
       <Image
         isDark={DarkCondition}
         imageDark="right-arrowDark.png"
