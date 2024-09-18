@@ -58,6 +58,7 @@ export default function Home() {
       [AUTH_NAME]: token,
     },
   };
+
   const fullName = userData && userData.fullName;
 
   const getCard = async () => {
