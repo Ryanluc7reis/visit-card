@@ -102,6 +102,15 @@ const Line = styled.div`
 const ImageAlt = styled(Image)`
   position: absolute;
   right: 38%;
+  @media (min-width: 768px) {
+    right: 44%;
+  }
+  @media (min-width: 1024px) {
+    right: 46%;
+  }
+  @media (min-width: 1349px) {
+    right: 47%;
+  }
 `;
 const NameUser = styled.h2`
   color: white;
