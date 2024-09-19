@@ -5,7 +5,6 @@ import { useTheme } from "@/context/ContextTheme";
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
 `;
 const StyledLabel = styled.p`
   font-weight: bold;
