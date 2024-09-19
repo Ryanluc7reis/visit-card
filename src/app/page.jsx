@@ -110,7 +110,7 @@ export default function Home() {
         </PopUpMessage>
       )}
       <title>{fullName ? `HelloVisit / ${fullName}` : `HelloVisit `}</title>
-      <Navigations />
+      <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
         {aboutData && (
           <About

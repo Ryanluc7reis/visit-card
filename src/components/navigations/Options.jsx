@@ -107,11 +107,10 @@ const NameUser = styled.h2`
   color: white;
   margin-bottom: 15px;
 `;
-export default function Options({ hasUser, logOut }) {
+export default function Options({ hasUser, hasAbout, logOut }) {
   const router = useRouter();
   const { theme, toggleThemeLight, toggleThemeDark } = useTheme();
   const [showSelectColor, setIsShowSelectColor] = useState(false);
-  const [hasAbout, setHasAbout] = useState(null);
 
   const DarkCondition = theme === "dark" ? true : false;
   const token =
@@ -138,18 +137,6 @@ export default function Options({ hasUser, logOut }) {
       console.error("Erro durante o logout:", error);
     }
   };
-  const getAbout = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
-      const data = response.data;
-      setHasAbout(data.about[0]);
-    } catch (error) {
-      console.error("Erro ao obter os dados do cartão:", error);
-    }
-  };
-  useEffect(() => {
-    getAbout();
-  }, []);
 
   return (
     <MenuContainer isDark={DarkCondition}>
@@ -163,7 +150,7 @@ export default function Options({ hasUser, logOut }) {
             }}
           >
             <Option isDark={DarkCondition}>Sobre nós</Option>
-            {hasAbout !== null ? (
+            {hasAbout ? (
               <>
                 <Option
                   isDark={DarkCondition}

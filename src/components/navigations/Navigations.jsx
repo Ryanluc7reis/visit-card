@@ -26,8 +26,9 @@ const Logo = styled.h3`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
-export default function Navigations() {
+export default function Navigations({ hasUser }) {
   const [isMenu, setIsMenu] = useState(false);
+  const [hasAbout, setHasAbout] = useState(null);
   const [userData, setUserData] = useState(null);
   const router = useRouter();
   const { theme } = useTheme();
@@ -57,9 +58,19 @@ export default function Navigations() {
       setUserData(false);
     }
   };
+  const getAbout = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
+      const data = response.data;
+      setHasAbout(data.about[0]);
+    } catch (error) {
+      console.error("Erro ao obter os dados do cartão:", error);
+    }
+  };
 
   useEffect(() => {
     verifyUser();
+    getAbout();
   }, [isMenu]);
   return (
     <NavContainer isDark={DarkCondition}>
@@ -67,10 +78,17 @@ export default function Navigations() {
         HelloVisit
       </Logo>
       {isMenu && (
-        <Options
-          hasUser={userData && userData.fullName}
-          logOut={() => setUserData(null)}
-        />
+        <>
+          {hasUser ? (
+            <Options
+              hasUser={userData && userData.fullName}
+              hasAbout={hasAbout}
+              logOut={() => setUserData(null)}
+            />
+          ) : (
+            <Options logOut={() => setUserData(null)} />
+          )}
+        </>
       )}
       <ImageAlt
         onClick={() => setIsMenu(!isMenu)}
