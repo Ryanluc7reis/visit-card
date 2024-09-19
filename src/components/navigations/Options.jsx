@@ -116,7 +116,7 @@ const NameUser = styled.h2`
 export default function Options({ hasUser, hasAbout, logOut }) {
   const router = useRouter();
   const { theme, toggleThemeLight, toggleThemeDark } = useTheme();
-  const [showSelectColor, setIsShowSelectColor] = useState(false);
+  const [showSelectColor, setShowSelectColor] = useState(false);
 
   const DarkCondition = theme === "dark" ? true : false;
   const token =
@@ -145,7 +145,10 @@ export default function Options({ hasUser, hasAbout, logOut }) {
   };
 
   return (
-    <MenuContainer isDark={DarkCondition}>
+    <MenuContainer
+      onClick={() => setShowSelectColor(!showSelectColor)}
+      isDark={DarkCondition}
+    >
       {hasUser ? (
         <>
           <NameUser isDark={DarkCondition}>Olá, {hasUser}</NameUser>
@@ -179,7 +182,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
 
             <OptionAlt
               isDark={DarkCondition}
-              onClick={() => setIsShowSelectColor(!showSelectColor)}
+              onClick={() => setShowSelectColor(!showSelectColor)}
             >
               Modo escuro
               <p style={{ color: "#707070", fontSize: "16px" }}>
@@ -231,7 +234,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
           </Option>
           <OptionAlt
             isDark={DarkCondition}
-            onClick={() => setIsShowSelectColor(!showSelectColor)}
+            onClick={() => setShowSelectColor(!showSelectColor)}
           >
             Modo escuro
             <p style={{ color: "#707070", fontSize: "16px" }}>
