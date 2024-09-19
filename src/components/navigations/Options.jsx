@@ -64,7 +64,7 @@ const MenuColorContainer = styled.div`
   height: 100px;
   position: absolute;
   background-color: ${(props) => props.theme.backgroundDark};
-  bottom: 11%;
+  bottom: 17%;
   animation: ${(props) => (props.showOptions ? slideDown : slideUp)} 0.3s
     forwards;
   transform-origin: top;
