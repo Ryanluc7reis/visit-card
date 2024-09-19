@@ -62,16 +62,13 @@ const OptionColor = styled.p`
 const MenuColorContainer = styled.div`
   width: 100%;
   height: 100px;
-  position: absolute;
+  position: fixed;
   background-color: ${(props) => props.theme.backgroundDark};
-  bottom: 17%;
+  margin-top: 190px;
   animation: ${(props) => (props.showOptions ? slideDown : slideUp)} 0.3s
     forwards;
   transform-origin: top;
   border-bottom: 1px solid #a3a3a379;
-  @media (min-width: 1300px) {
-    bottom: 17%;
-  }
 `;
 const slideDown = keyframes`
   from {
