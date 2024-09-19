@@ -50,6 +50,7 @@ export default function EditProfilePage() {
   }));
 
   const DarkCondition = theme === "dark" ? true : false;
+  const fullName = userData && userData.fullName;
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
@@ -59,7 +60,6 @@ export default function EditProfilePage() {
       [AUTH_NAME]: token,
     },
   };
-  const fullName = userData && userData.fullName;
 
   const handleSaveEditCard = () => {
     mutate(`${API_URL}/card/getAbout`);
@@ -156,7 +156,7 @@ export default function EditProfilePage() {
         </PopUpMessage>
       )}
       <title>{fullName && `Editando perfil / ${fullName} `}</title>
-      <Navigations />
+      <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
         <Title isDark={DarkCondition}> Detalhes de sobre </Title>
         {aboutData && (

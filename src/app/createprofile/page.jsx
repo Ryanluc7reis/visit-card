@@ -100,6 +100,7 @@ export default function CreateProfilePage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [error, setError] = useState({});
   const [linksArray, setLinksArray] = useState([{ id: 1, app: "", url: "" }]);
@@ -110,7 +111,7 @@ export default function CreateProfilePage() {
   });
 
   const DarkCondition = theme === "dark" ? true : false;
-
+  const fullName = userData && userData.fullName;
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
@@ -218,7 +219,22 @@ export default function CreateProfilePage() {
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
+  const verifyUser = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/user/verify-session`,
+        configAuth
+      );
+
+      const data = response.data;
+      setUserData(data);
+    } catch (error) {
+      console.error("Erro ao verificar sessão:", error);
+      setUserData(false);
+    }
+  };
   useEffect(() => {
+    verifyUser();
     getAbout();
     setLoadingScreen(false);
     setTimeout(() => {
@@ -242,7 +258,7 @@ export default function CreateProfilePage() {
         </PopUpMessage>
       )}
       <title>Novo perfil</title>
-      <Navigations />
+      <Navigations hasUser={fullName} />
       <Form onSubmit={handleForm} isDark={DarkCondition}>
         <TitleSection isDark={DarkCondition}>Crie seu sobre</TitleSection>
         <BoxContainer isDark={DarkCondition}>

@@ -77,6 +77,7 @@ export default function LoginPage() {
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [error, setError] = useState({});
   const [formData, setFormData] = useState({
@@ -86,6 +87,15 @@ export default function LoginPage() {
 
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
   const DarkCondition = theme === "dark" ? true : false;
+  const fullName = userData && userData.fullName;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
+  const configAuth = {
+    headers: {
+      [AUTH_NAME]: token,
+    },
+  };
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -127,7 +137,23 @@ export default function LoginPage() {
       [name]: value,
     });
   };
+
+  const verifyUser = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/user/verify-session`,
+        configAuth
+      );
+
+      const data = response.data;
+      setUserData(data);
+    } catch (error) {
+      console.error("Erro ao verificar sessão:", error);
+      setUserData(false);
+    }
+  };
   useEffect(() => {
+    verifyUser();
     setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
@@ -147,7 +173,7 @@ export default function LoginPage() {
         </PopUpMessage>
       )}
       <title>Entrar</title>
-      <Navigations />
+      <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
         <Form onSubmit={handleForm} isDark={DarkCondition}>
           <Title isDark={DarkCondition}>Entrar na sua conta</Title>

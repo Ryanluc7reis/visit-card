@@ -76,12 +76,10 @@ export default function SignupPage() {
   const { setShowPopUp, setMessageType, showPopUp, messageType } = usePopUp();
   const router = useRouter();
 
-  const API_URL = process.env.NEXT_PUBLIC_URL_API;
-  const DarkCondition = theme === "dark" ? true : false;
-
   const [error, setError] = useState({});
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -89,6 +87,18 @@ export default function SignupPage() {
     email: "",
     password: "",
   });
+
+  const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const DarkCondition = theme === "dark" ? true : false;
+  const fullName = userData && userData.fullName;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
+  const configAuth = {
+    headers: {
+      [AUTH_NAME]: token,
+    },
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -148,7 +158,22 @@ export default function SignupPage() {
     }
   };
 
+  const verifyUser = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/user/verify-session`,
+        configAuth
+      );
+
+      const data = response.data;
+      setUserData(data);
+    } catch (error) {
+      console.error("Erro ao verificar sessão:", error);
+      setUserData(false);
+    }
+  };
   useEffect(() => {
+    verifyUser();
     setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
@@ -167,7 +192,7 @@ export default function SignupPage() {
         </PopUpMessage>
       )}
       <title>Novo cadastro</title>
-      <Navigations />
+      <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
         <Form onSubmit={handleForm} isDark={DarkCondition}>
           <Title isDark={DarkCondition}>Cadastrar sua conta</Title>
