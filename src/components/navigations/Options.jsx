@@ -145,10 +145,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
   };
 
   return (
-    <MenuContainer
-      onClick={() => setShowSelectColor(!showSelectColor)}
-      isDark={DarkCondition}
-    >
+    <MenuContainer isDark={DarkCondition}>
       {hasUser ? (
         <>
           <NameUser isDark={DarkCondition}>Olá, {hasUser}</NameUser>
