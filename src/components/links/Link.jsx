@@ -70,7 +70,7 @@ export default function Link({ url, app }) {
 
     // Verifica o nome do aplicativo e retorna a URL universal correspondente
     if (lowerCaseAppName === "Whatsapp") {
-      return "https://wa.me/5534998069617"; // URL universal do Facebook
+      return "https://wa.me/55349980696f17"; // URL universal do Facebook
     } else if (lowerCaseAppName === "Instagram") {
       return "https://www.instagram.com/ryanluc7reis"; // URL universal do Instagram
     }
