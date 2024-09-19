@@ -159,21 +159,23 @@ export default function EditProfilePage() {
       <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
         <Title isDark={DarkCondition}> Detalhes de sobre </Title>
-        {aboutData && (
-          <>
-            <EditAbout
-              id={aboutData._id}
-              name={aboutData.name}
-              companyName={aboutData.companyName}
-              location={aboutData.location}
-              description={aboutData.description}
-              onSave={handleSaveEditCard}
-            />
-          </>
+        {aboutData === null ? (
+          <LoadingScreen loadingContent />
+        ) : (
+          <EditAbout
+            id={aboutData._id}
+            name={aboutData.name}
+            companyName={aboutData.companyName}
+            location={aboutData.location}
+            description={aboutData.description}
+            onSave={handleSaveEditCard}
+          />
         )}
 
         <Title isDark={DarkCondition}> Detalhes de links</Title>
-        {linksData.length > 0 &&
+        {linksData.length === 0 ? (
+          <LoadingScreen loadingContent />
+        ) : (
           linksData.map((link) => (
             <EditLink
               key={link._id}
@@ -183,7 +185,9 @@ export default function EditProfilePage() {
               url={link.url}
               onSave={handleSaveEditCard}
             />
-          ))}
+          ))
+        )}
+
         <Image
           isDark={DarkCondition}
           imageDark="plusDark.png"

@@ -11,6 +11,7 @@ import About from "@/components/about/About";
 import Link from "@/components/links/Link";
 import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
+import { link } from "joi";
 
 const Container = styled.div`
   width: 100%;
@@ -112,7 +113,9 @@ export default function Home() {
       <title>{fullName ? `HelloVisit / ${fullName}` : `HelloVisit `}</title>
       <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
-        {aboutData && (
+        {aboutData === null ? (
+          <LoadingScreen loadingContent />
+        ) : (
           <About
             id={aboutData._id}
             name={aboutData.name}
@@ -126,10 +129,13 @@ export default function Home() {
           <TitleSection isDark={DarkCondition}>Redes Sociais</TitleSection>
           <Line isDark={DarkCondition} />
         </StyledFlexTitle>
-        {linksData.length > 0 &&
+        {linksData.length === 0 ? (
+          <LoadingScreen loadingContent />
+        ) : (
           linksData.map((link) => (
             <Link key={link._id} app={link.app} url={link.url} />
-          ))}
+          ))
+        )}
       </Container>
     </>
   );
