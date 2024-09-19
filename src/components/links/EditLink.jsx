@@ -28,7 +28,7 @@ const Form = styled.form`
 const InputAlt = styled(Input)`
   background: transparent;
   border: none;
-  width: 165px;
+
   border-bottom: 1px solid
     ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
   color: ${(props) =>
