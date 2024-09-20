@@ -33,6 +33,14 @@ const Title = styled.h3`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
+const ErrorMessage = styled.h3`
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+`;
+const StyledFlexErrorMessage = styled.div`
+  display: flex;
+  gap: 7px;
+`;
 export default function EditProfilePage() {
   const { theme } = useTheme();
   const { showPopUp, messageType, setShowPopUp, setMessageType } = usePopUp();
@@ -40,6 +48,7 @@ export default function EditProfilePage() {
 
   const [aboutData, setAboutData] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
+  const [error, setError] = useState(false);
   const [linksData, setlinksData] = useState([]);
   const [linkId, setLinkId] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -133,6 +142,12 @@ export default function EditProfilePage() {
     getLinks();
     setLoadingScreen(false);
     setTimeout(() => {
+      if (linksData.lenth === 0 || aboutData === null) {
+        setError(true);
+      }
+    }, 10000);
+
+    setTimeout(() => {
       setShowPopUp(false);
     }, 2500);
   }, [showPopUp]);
@@ -160,7 +175,22 @@ export default function EditProfilePage() {
       <Container isDark={DarkCondition}>
         <Title isDark={DarkCondition}> Detalhes de sobre </Title>
         {aboutData === null ? (
-          <LoadingScreen loadingContent />
+          <>
+            {error ? (
+              <StyledFlexErrorMessage>
+                <ErrorMessage isDark={DarkCondition}>
+                  Erro ao obter dados
+                </ErrorMessage>
+                {theme === "dark" ? (
+                  <Image isDark imageDark="badEmoji-dark.png" alt="" />
+                ) : (
+                  <Image image="badEmoji-white.png" alt="" />
+                )}
+              </StyledFlexErrorMessage>
+            ) : (
+              <LoadingScreen loadingContent />
+            )}
+          </>
         ) : (
           <EditAbout
             id={aboutData._id}
@@ -174,7 +204,22 @@ export default function EditProfilePage() {
 
         <Title isDark={DarkCondition}> Detalhes de links</Title>
         {linksData.length === 0 ? (
-          <LoadingScreen loadingContent />
+          <>
+            {error ? (
+              <StyledFlexErrorMessage>
+                <ErrorMessage isDark={DarkCondition}>
+                  Erro ao obter dados
+                </ErrorMessage>
+                {theme === "dark" ? (
+                  <Image isDark imageDark="badEmoji-dark.png" alt="" />
+                ) : (
+                  <Image image="badEmoji-white.png" alt="" />
+                )}
+              </StyledFlexErrorMessage>
+            ) : (
+              <LoadingScreen loadingContent />
+            )}
+          </>
         ) : (
           linksData.map((link) => (
             <EditLink

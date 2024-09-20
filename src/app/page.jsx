@@ -11,7 +11,7 @@ import About from "@/components/about/About";
 import Link from "@/components/links/Link";
 import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
-import { link } from "joi";
+import Image from "@/components/image/Image";
 
 const Container = styled.div`
   width: 100%;
@@ -41,10 +41,19 @@ const TitleSection = styled.h3`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
+const ErrorMessage = styled.h3`
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+`;
+const StyledFlexErrorMessage = styled.div`
+  display: flex;
+  gap: 7px;
+`;
 export default function Home() {
   const { theme } = useTheme();
   const { messageType, showPopUp, setShowPopUp, setMessageType } = usePopUp();
   const [aboutData, setAboutData] = useState(null);
+  const [error, setError] = useState(false);
   const [linksData, setlinksData] = useState([]);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [userData, setUserData] = useState(null);
@@ -91,6 +100,13 @@ export default function Home() {
     getCard();
     verifyUser();
     setLoadingScreen(false);
+
+    setTimeout(() => {
+      if (linksData.lenth === 0 || aboutData === null) {
+        setError(true);
+      }
+    }, 10000);
+
     setTimeout(() => {
       setShowPopUp(false);
     }, 3500);
@@ -114,7 +130,22 @@ export default function Home() {
       <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
         {aboutData === null ? (
-          <LoadingScreen loadingContent />
+          <>
+            {error ? (
+              <StyledFlexErrorMessage>
+                <ErrorMessage isDark={DarkCondition}>
+                  Erro ao obter dados
+                </ErrorMessage>
+                {theme === "dark" ? (
+                  <Image isDark imageDark="badEmoji-dark.png" alt="" />
+                ) : (
+                  <Image image="badEmoji-white.png" alt="" />
+                )}
+              </StyledFlexErrorMessage>
+            ) : (
+              <LoadingScreen loadingContent />
+            )}
+          </>
         ) : (
           <About
             id={aboutData._id}
@@ -130,7 +161,22 @@ export default function Home() {
           <Line isDark={DarkCondition} />
         </StyledFlexTitle>
         {linksData.length === 0 ? (
-          <LoadingScreen loadingContent />
+          <>
+            {error ? (
+              <StyledFlexErrorMessage>
+                <ErrorMessage isDark={DarkCondition}>
+                  Erro ao obter dados
+                </ErrorMessage>
+                {theme === "dark" ? (
+                  <Image isDark imageDark="badEmoji-dark.png" alt="" />
+                ) : (
+                  <Image image="badEmoji-white.png" alt="" />
+                )}
+              </StyledFlexErrorMessage>
+            ) : (
+              <LoadingScreen loadingContent />
+            )}
+          </>
         ) : (
           linksData.map((link) => (
             <Link key={link._id} app={link.app} url={link.url} />
