@@ -108,6 +108,7 @@ export default function EditProfilePage() {
       const data = response.data;
       setAboutData(data.about[0]);
     } catch (error) {
+      setError(true);
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
@@ -119,6 +120,7 @@ export default function EditProfilePage() {
       setLinkId(data[0]._id);
       setlinksData(data[0].links);
     } catch (error) {
+      setError(true);
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
@@ -141,11 +143,6 @@ export default function EditProfilePage() {
     getAbout();
     getLinks();
     setLoadingScreen(false);
-    setTimeout(() => {
-      if (linksData.lenth === 0 || aboutData === null) {
-        setError(true);
-      }
-    }, 10000);
 
     setTimeout(() => {
       setShowPopUp(false);

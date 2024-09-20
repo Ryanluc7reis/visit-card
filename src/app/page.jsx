@@ -75,9 +75,11 @@ export default function Home() {
     try {
       const response = await axios.get(`${API_URL}/card/ryan1`);
       const data = response.data;
+
       setAboutData(data.about[0]);
       setlinksData(data.links[0].links);
     } catch (error) {
+      setError(true);
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
@@ -100,12 +102,6 @@ export default function Home() {
     getCard();
     verifyUser();
     setLoadingScreen(false);
-
-    setTimeout(() => {
-      if (linksData.lenth === 0 || aboutData === null) {
-        setError(true);
-      }
-    }, 10000);
 
     setTimeout(() => {
       setShowPopUp(false);
