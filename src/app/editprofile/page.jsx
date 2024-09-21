@@ -178,11 +178,12 @@ export default function EditProfilePage() {
                 <ErrorMessage isDark={DarkCondition}>
                   Erro ao obter dados
                 </ErrorMessage>
-                {theme === "dark" ? (
-                  <Image isDark imageDark="badEmoji-dark.png" alt="" />
-                ) : (
-                  <Image image="badEmoji-white.png" alt="" />
-                )}
+                <Image
+                  isDark={DarkCondition}
+                  imageDark="badEmoji-dark.png"
+                  image="badEmoji-white.png"
+                  alt=""
+                />
               </StyledFlexErrorMessage>
             ) : (
               <LoadingScreen loadingContent />
@@ -207,11 +208,12 @@ export default function EditProfilePage() {
                 <ErrorMessage isDark={DarkCondition}>
                   Erro ao obter dados
                 </ErrorMessage>
-                {theme === "dark" ? (
-                  <Image isDark imageDark="badEmoji-dark.png" alt="" />
-                ) : (
-                  <Image image="badEmoji-white.png" alt="" />
-                )}
+                <Image
+                  isDark={DarkCondition}
+                  imageDark="badEmoji-dark.png"
+                  image="badEmoji-white.png"
+                  alt=""
+                />
               </StyledFlexErrorMessage>
             ) : (
               <LoadingScreen loadingContent />
