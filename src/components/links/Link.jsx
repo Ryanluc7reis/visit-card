@@ -45,41 +45,6 @@ export default function Link({ url, app }) {
   const DarkCondition = theme === "dark" ? true : false;
   const handleRedirect = () => {
     window.open(url, "_blank");
-    // Verifica se está em dispositivo móvel
-    // if (isMobile) {
-    //   const appDeepLink = getUniversalLink(app);
-
-    //   if (appDeepLink) {
-    //     // Tenta abrir o link do app
-    //     window.location.href = appDeepLink;
-
-    //     // Fallback após um tempo se o app não abrir
-    //     setTimeout(() => {
-    //       window.open(url, "_blank"); // Redireciona para a versão web em uma nova aba
-    //     }, 2000);
-    //   } else {
-    //     window.open(url, "_blank"); // Redireciona para a versão web se o deep link não for suportado, em nova aba
-    //   }
-    // } else {
-    //   window.open(url, "_blank"); // Se não estiver no mobile, abre a versão web em uma nova aba
-    // }
-  };
-
-  const getUniversalLink = (appName) => {
-    console.log("oi");
-    // Converte o nome do aplicativo para letras minúsculas
-    const lowerCaseAppName = appName.toLowerCase();
-
-    // Verifica o nome do aplicativo e retorna a URL universal correspondente
-    if (lowerCaseAppName === "Whatsapp") {
-      return "https://wa.me/55349980696f17"; // URL universal do Facebook
-    } else if (lowerCaseAppName === "Instagram") {
-      return "https://www.instagram.com/ryanluc7rei.,s"; // URL universal do Instagram
-    }
-    // Adicione outras URLs universais aqui
-    else {
-      return null; // Retorna null se não existir URL universal
-    }
   };
 
   return (
