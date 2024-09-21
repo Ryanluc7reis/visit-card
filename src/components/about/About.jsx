@@ -79,9 +79,24 @@ export default function About({ name, companyName, location, description }) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark";
 
-  const handlePhoneClick = () => {
-    const phoneNumber = "123456789"; // Substitua pelo número desejado
-    window.location.href = `tel:${phoneNumber}`;
+  const handleDownloadVCard = () => {
+    const vCardData = `
+      BEGIN:VCARD
+      VERSION:3.0
+      FN:${name} 
+      ORG:${companyName}
+      TEL;TYPE=CELL:+1234567890
+      ADR;TYPE=HOME:${location}
+      END:VCARD
+    `;
+
+    const blob = new Blob([vCardData], { type: "text/vcard" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "contact.vcf"; // Nome do arquivo de contato
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -99,7 +114,7 @@ export default function About({ name, companyName, location, description }) {
           imageDark="phone.png"
           image="phoneLight.png"
           alt=""
-          onClick={handlePhoneClick} // Adiciona o evento de clique
+          onClick={handleDownloadVCard} // Ao clicar, baixa o vCard
         />
       </StyledFlexImages>
 
