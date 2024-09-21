@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
-
 import Image from "../image/Image";
 
 const AboutContainer = styled.div`
@@ -75,9 +74,16 @@ const Description = styled.h4`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
-export default function About({name,companyName,location,description}) {
+
+export default function About({ name, companyName, location, description }) {
   const { theme } = useTheme();
-  const DarkCondition = theme === "dark" ? true : false;
+  const DarkCondition = theme === "dark";
+
+  const handlePhoneClick = () => {
+    const phoneNumber = "123456789"; // Substitua pelo número desejado
+    window.location.href = `tel:${phoneNumber}`;
+  };
+
   return (
     <AboutContainer isDark={DarkCondition}>
       <StyledFlexImages>
@@ -93,6 +99,7 @@ export default function About({name,companyName,location,description}) {
           imageDark="phone.png"
           image="phoneLight.png"
           alt=""
+          onClick={handlePhoneClick} // Adiciona o evento de clique
         />
       </StyledFlexImages>
 
@@ -105,14 +112,10 @@ export default function About({name,companyName,location,description}) {
             image="mapLight.png"
             alt=""
           />
-          <Localization isDark={DarkCondition}>
-           {location}
-          </Localization>
+          <Localization isDark={DarkCondition}>{location}</Localization>
         </div>
         <NameAndLabel isDark={DarkCondition}>{companyName}</NameAndLabel>
-        <Description isDark={DarkCondition}>
-         {description}
-        </Description>
+        <Description isDark={DarkCondition}>{description}</Description>
       </StyledFlexDescription>
     </AboutContainer>
   );
