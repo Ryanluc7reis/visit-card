@@ -93,7 +93,14 @@ const ErrorMessage = styled.span`
   font-weight: bold;
   font-size: 13px;
 `;
-
+const StyledFlexErroMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 15px;
+`;
 export default function CreateProfilePage() {
   const { theme } = useTheme();
   const { showPopUp, setShowPopUp, setMessageType, messageType } = usePopUp();
@@ -190,11 +197,29 @@ export default function CreateProfilePage() {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
       }
-      if (err.response.data.errors[0].message) {
-        setError({
-          ...error,
-          location: err.response.data.errors[0].message,
-        });
+      if (err.response.data.errors && err.response.data.errors[0].message) {
+        const fieldErrors = err.response.data.errors.reduce(
+          (acc, currentError) => {
+            const field = currentError.field;
+            const message = currentError.message;
+
+            if (field.startsWith("links.")) {
+              const [_, index, key] = field.split(".");
+              if (!acc.links) acc.links = [];
+              acc.links[parseInt(index)] = {
+                ...(acc.links[parseInt(index)] || {}),
+                [key]: message,
+              };
+            } else {
+              acc[field] = message;
+            }
+
+            return acc;
+          },
+          {}
+        );
+
+        setError(fieldErrors);
       }
       setShowPopUp(true);
       setMessageType("error");
@@ -294,7 +319,7 @@ export default function CreateProfilePage() {
         </BoxContainer>
         <TitleSection isDark={DarkCondition}>Crie seus links</TitleSection>
         <BoxContainer isDark={DarkCondition}>
-          {linksArray.map((link) => (
+          {linksArray.map((link, index) => (
             <LinkItem key={link.id}>
               <Selecter
                 label="Selecione seu aplicativo"
@@ -306,30 +331,38 @@ export default function CreateProfilePage() {
                 value={link.app}
                 required
               />
-              <div
-                style={{ display: "flex", alignItems: "end", width: "100%" }}
-              >
-                <InputLink
-                  label="Seu link"
-                  placeholder="Cole sua URL aqui"
-                  isDark={DarkCondition}
-                  name="url"
-                  value={link.url}
-                  onChange={(e) =>
-                    handleInputChange(link.id, "url", e.target.value)
-                  }
-                  required
-                />
-                <Image
-                  isDark={DarkCondition}
-                  imageDark="xDark.png"
-                  image="xLight.png"
-                  alt=""
-                  onClick={handleRemoveLink}
-                />
-              </div>
+              <StyledFlexErroMessage>
+                <div
+                  style={{ display: "flex", alignItems: "end", width: "100%" }}
+                >
+                  <InputLink
+                    label="Seu link"
+                    placeholder="Cole sua URL aqui"
+                    isDark={DarkCondition}
+                    name="url"
+                    value={link.url}
+                    onChange={(e) =>
+                      handleInputChange(link.id, "url", e.target.value)
+                    }
+                    required
+                  />
+                  <Image
+                    isDark={DarkCondition}
+                    imageDark="xDark.png"
+                    image="xLight.png"
+                    alt=""
+                    onClick={handleRemoveLink}
+                  />
+                </div>
+                {error?.links &&
+                  error.links[index] &&
+                  error.links[index].url && (
+                    <ErrorMessage>{error.links[index].url}</ErrorMessage>
+                  )}
+              </StyledFlexErroMessage>
             </LinkItem>
           ))}
+
           <Image
             isDark={DarkCondition}
             imageDark="plusDark.png"

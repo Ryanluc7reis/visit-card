@@ -128,7 +128,10 @@ export default function SignupPage() {
         router.push("/login");
       }
     } catch (err) {
-      if (err.response.data.errors[0].type === "string.empty") {
+      if (
+        err.response.data.errors &&
+        err.response.data.errors[0].type === "string.empty"
+      ) {
         const field = err.response.data.errors[0].field;
         setError({
           ...error,
