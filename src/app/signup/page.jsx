@@ -25,9 +25,10 @@ const Container = styled.div`
 `;
 const Form = styled.form`
   width: 90%;
-  min-height: 540px;
+  min-height: 570px;
   margin-top: 40px;
   display: flex;
+  padding: 10px 0px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -86,6 +87,7 @@ export default function SignupPage() {
     user: "",
     email: "",
     password: "",
+    number: "",
   });
 
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
@@ -200,6 +202,15 @@ export default function SignupPage() {
         <Form onSubmit={handleForm} isDark={DarkCondition}>
           <Title isDark={DarkCondition}>Cadastrar sua conta</Title>
           <InputAlt
+            label="Nome de usuário"
+            placeholder="Nome de usuário"
+            name="user"
+            onChange={handleChange}
+            value={formData.user}
+            error={error.user}
+          />
+          {error.user && <ErrorMessage>{error.user}</ErrorMessage>}
+          <InputAlt
             label="Nome"
             placeholder="Nome"
             name="firstName"
@@ -217,15 +228,7 @@ export default function SignupPage() {
             error={error.lastName}
           />
           {error.lastName && <ErrorMessage>{error.lastName}</ErrorMessage>}
-          <InputAlt
-            label="Usuário"
-            placeholder="Usuário"
-            name="user"
-            onChange={handleChange}
-            value={formData.user}
-            error={error.user}
-          />
-          {error.user && <ErrorMessage>{error.user}</ErrorMessage>}
+
           <InputAlt
             label="E-mail"
             placeholder="E-mail"
@@ -235,6 +238,15 @@ export default function SignupPage() {
             error={error.email}
           />
           {error.email && <ErrorMessage>{error.email}</ErrorMessage>}
+          <InputAlt
+            label="Número"
+            placeholder="Número"
+            name="number"
+            onChange={handleChange}
+            value={formData.number}
+            error={error.number}
+          />
+          {error.number && <ErrorMessage>{error.number}</ErrorMessage>}
           <InputAlt
             label="Senha"
             placeholder="Senha"
@@ -246,7 +258,7 @@ export default function SignupPage() {
           />
           {error.password && <ErrorMessage>{error.password}</ErrorMessage>}
           <div
-            style={{ width: "100%", textAlign: "center", marginTop: " 15px" }}
+            style={{ width: "100%", textAlign: "center", marginTop: " 8px" }}
           >
             <Button type="submit" loading={loading}>
               Vamos lá
