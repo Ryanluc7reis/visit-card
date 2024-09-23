@@ -86,14 +86,14 @@ export default function About({
   const DarkCondition = theme === "dark";
 
   const handleDownloadVCard = () => {
-    const vCardData = `
-      BEGIN:VCARD
-      VERSION:3.0
-      FN:${name}
-      ORG:${companyName}
-      TEL;TYPE=CELL:${number.startsWith("+") ? number : "+" + number}
-      END:VCARD
-    `;
+    const vCardData = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      `FN:${name}`,
+      `ORG:${companyName}`,
+      `TEL;TYPE=CELL:${number.startsWith("+") ? number : "+" + number}`,
+      "END:VCARD",
+    ].join("\r\n"); // Garantir que as quebras de linha estejam no formato correto
 
     const blob = new Blob([vCardData], { type: "text/vcard" });
     const link = document.createElement("a");
