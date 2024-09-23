@@ -75,7 +75,13 @@ const Description = styled.h4`
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
 
-export default function About({ name, companyName, location, description }) {
+export default function About({
+  name,
+  companyName,
+  location,
+  description,
+  number,
+}) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark";
 
@@ -83,17 +89,16 @@ export default function About({ name, companyName, location, description }) {
     const vCardData = `
       BEGIN:VCARD
       VERSION:3.0
-      FN:${name} 
+      FN:${name}
       ORG:${companyName}
-      TEL;TYPE=CELL:+1234567890
-      ADR;TYPE=HOME:${location}
+      TEL;TYPE=CELL:${number.startsWith("+") ? number : "+" + number}
       END:VCARD
     `;
 
     const blob = new Blob([vCardData], { type: "text/vcard" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "contact.vcf"; // Nome do arquivo de contato
+    link.download = "contact.vcf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -114,7 +119,7 @@ export default function About({ name, companyName, location, description }) {
           imageDark="phone.png"
           image="phoneLight.png"
           alt=""
-          onClick={handleDownloadVCard} // Ao clicar, baixa o vCard
+          onClick={handleDownloadVCard}
         />
       </StyledFlexImages>
 
