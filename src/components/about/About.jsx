@@ -86,7 +86,8 @@ export default function About({
   const DarkCondition = theme === "dark";
 
   const handleDownloadVCard = () => {
-    const currentNumber = number.startsWith("+") ? number : "+" + number;
+    const currentNumber = number?.startsWith("+") ? number : "+" + number;
+
     const vCardData = [
       "BEGIN:VCARD",
       "VERSION:3.0",

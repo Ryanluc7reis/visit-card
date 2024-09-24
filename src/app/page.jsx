@@ -150,7 +150,7 @@ export default function Home() {
             companyName={aboutData.companyName}
             location={aboutData.location}
             description={aboutData.description}
-            number={userData.number}
+            number={aboutData.number}
           />
         )}
 
