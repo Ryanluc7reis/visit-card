@@ -86,24 +86,28 @@ export default function About({
   const DarkCondition = theme === "dark";
 
   const handleDownloadVCard = () => {
+    const currentNumber = number.startsWith("+") ? number : "+" + number;
     const vCardData = [
       "BEGIN:VCARD",
       "VERSION:3.0",
       `FN:${name}`,
       `ORG:${companyName}`,
-      `TEL;TYPE=CELL:${number.startsWith("+") ? number : "+" + number}`,
+      `TEL;TYPE=CELL:${currentNumber}`,
       "END:VCARD",
-    ].join("\r\n"); // Garantir que as quebras de linha estejam no formato correto
+    ].join("\r\n");
 
-    const blob = new Blob([vCardData], { type: "text/vcard" });
+    const blob = new Blob([vCardData], { type: "text/x-vcard" });
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "contact.vcf";
+    const url = URL.createObjectURL(blob);
+
+    link.href = url;
+    link.download = `${name}_contact.vcf`;
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
-  };
 
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
   return (
     <AboutContainer isDark={DarkCondition}>
       <StyledFlexImages>
