@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
-import { isMobile } from "react-device-detect";
+import { useState } from "react";
 
 import Image from "@/components/image/Image";
+import GeneratorPix from "../generatorpix/GeneratorPix";
 
 const LinkContainer = styled.a`
   width: 87%;
@@ -40,11 +41,18 @@ const NameLink = styled.h4`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
-export default function Link({ url, app }) {
+export default function Link({ name, location, pixKey, url, app }) {
+  const [showPix, setShowPix] = useState(false);
+
   const { theme } = useTheme();
   const DarkCondition = theme === "dark" ? true : false;
+
   const handleRedirect = () => {
-    window.open(url, "_blank");
+    if (app === "Pix") {
+      setShowPix(!showPix);
+    } else {
+      window.open(url, "_blank");
+    }
   };
 
   return (
@@ -54,6 +62,15 @@ export default function Link({ url, app }) {
       {app === "Facebook" && <ImageByPadding image="facebook.png" alt="" />}
       {app === "Telegram" && <ImageByPadding image="telegram.png" alt="" />}
       {app === "Linkedin" && <ImageByPadding image="linkedin.png" alt="" />}
+      {app === "Pix" && <ImageByWidth image="pix.png" alt="" />}
+      {showPix && (
+        <GeneratorPix
+          pixKey={pixKey}
+          name={name}
+          location={location}
+          setShowPix={setShowPix}
+        />
+      )}
 
       <NameLink isDark={DarkCondition}>{app}</NameLink>
 

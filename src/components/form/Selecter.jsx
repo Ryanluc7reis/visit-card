@@ -49,6 +49,9 @@ export const Selecter = ({ label, ...props }) => {
         <StyledOption isDark={DarkCondition} value="" disabled={true}>
           Aplicativos
         </StyledOption>
+        <StyledOption isDark={DarkCondition} value="Pix">
+          Pix
+        </StyledOption>
         <StyledOption isDark={DarkCondition} value="Instagram">
           Instagram
         </StyledOption>

@@ -96,7 +96,7 @@ export default function EditProfilePage() {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
       }
-      console.erro(err.message);
+      console.error(err.message);
       setShowPopUp(true);
       setMessageType("error");
     }

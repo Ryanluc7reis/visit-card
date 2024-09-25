@@ -337,7 +337,11 @@ export default function CreateProfilePage() {
                 >
                   <InputLink
                     label="Seu link"
-                    placeholder="Cole sua URL aqui"
+                    placeholder={
+                      link.app === "Pix"
+                        ? "Cole sua chave PIX aqui"
+                        : "Cole sua URL aqui"
+                    }
                     isDark={DarkCondition}
                     name="url"
                     value={link.url}

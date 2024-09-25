@@ -20,6 +20,8 @@ const BoxMessage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 10px;
+  text-align: center;
   gap: 7px;
   z-index: 100;
   position: fixed;
@@ -71,7 +73,7 @@ export default function PopUpMessage({ error, error2, children, ...props }) {
     <>
       <BoxMessage isDark={DarkCondition} {...props} request>
         {children}
-        {error || error2 ? <Img src="error.png" /> : <Img src="/check.png" />}
+        {error || error2 ? <Img src="error.png" /> : <Img src="check.png" />}
       </BoxMessage>
     </>
   );
