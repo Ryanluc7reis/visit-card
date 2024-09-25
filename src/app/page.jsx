@@ -98,6 +98,19 @@ export default function Home() {
     }
   };
 
+  function getFormattedLocation(location) {
+    if (location?.length > 15) {
+      const commaIndex = location.indexOf(",");
+
+      if (commaIndex !== -1) {
+        return location.slice(0, commaIndex);
+      }
+    }
+    return location;
+  }
+  const pixLinks = linksData.filter((link) => link.app === "Pix");
+  const pixLocation = getFormattedLocation(aboutData?.location);
+
   useEffect(() => {
     getCard();
     verifyUser();
@@ -106,7 +119,7 @@ export default function Home() {
     setTimeout(() => {
       setShowPopUp(false);
     }, 3500);
-  }, []);
+  }, [showPopUp]);
 
   if (loadingScreen) {
     return <LoadingScreen />;
@@ -119,6 +132,8 @@ export default function Home() {
           {messageType === "hasProfile" && "Você já possui um perfil"}
           {messageType === "createdUser" && "Conta criada com sucesso"}
           {messageType === "createdProfile" && "Perfil criado com sucesso"}
+          {messageType === "copy" &&
+            "Código copiado para pagar com Pix copia e cola"}
           {messageType === "error" && "Algo deu errado"}
         </PopUpMessage>
       )}
@@ -178,7 +193,14 @@ export default function Home() {
           </>
         ) : (
           linksData.map((link) => (
-            <Link key={link._id} app={link.app} url={link.url} />
+            <Link
+              key={link._id}
+              app={link.app}
+              url={link.url}
+              name={aboutData.name}
+              location={pixLocation}
+              pixKey={pixLinks[0].url}
+            />
           ))
         )}
       </Container>
