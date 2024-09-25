@@ -166,14 +166,6 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
       .catch((err) => console.error("Erro ao converter canvas em blob:", err));
   };
 
-  useEffect(() => {
-    if (qrCodeRef.current) {
-      const svg = qrCodeRef.current.querySelector("canvas");
-      if (!svg) {
-        console.error("Elemento CANVAS não encontrado!");
-      }
-    }
-  }, [currentValue, brCode]);
   const handleOutsideClick = () => {
     setShowPix(false);
   };
