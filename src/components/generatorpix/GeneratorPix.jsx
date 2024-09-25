@@ -22,7 +22,7 @@ const ContainerPix = styled.div`
 `;
 const BoxPix = styled.div`
   width: 90%;
-  height: 400px;
+  height: 440px;
   padding: 10px;
   background-color: ${(props) =>
     props.isDark
@@ -136,24 +136,44 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
       });
   };
   const shareQRCode = () => {
-    const qrCanvas = qrCodeRef.current.querySelector("canvas");
+    const qrCanvas = qrCodeRef.current?.querySelector("canvas");
+
+    if (!qrCanvas) {
+      console.error("QR Code não foi gerado corretamente.");
+      return;
+    }
+
     const qrDataUrl = qrCanvas.toDataURL("image/png");
 
-    const file = new File([qrDataUrl], "qrcode.png", { type: "image/png" });
+    fetch(qrDataUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], "qrcode.png", { type: "image/png" });
 
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "Compartilhar QR Code",
-          text: "Aqui está o QR Code gerado.",
-          files: [file],
-        })
-        .then(() => console.log("Compartilhamento concluído com sucesso"))
-        .catch((error) => console.log("Erro ao compartilhar:", error));
-    } else {
-      console.error("API de compartilhamento não suportada");
-    }
+        if (navigator.share) {
+          navigator
+            .share({
+              title: "Compartilhar QR Code",
+              text: "Aqui está o QR Code gerado.",
+              files: [file],
+            })
+            .then(() => console.log("Compartilhamento concluído com sucesso"))
+            .catch((error) => console.log("Erro ao compartilhar:", error));
+        } else {
+          console.error("API de compartilhamento não suportada");
+        }
+      })
+      .catch((err) => console.error("Erro ao converter canvas em blob:", err));
   };
+
+  useEffect(() => {
+    if (qrCodeRef.current) {
+      const svg = qrCodeRef.current.querySelector("canvas");
+      if (!svg) {
+        console.error("Elemento CANVAS não encontrado!");
+      }
+    }
+  }, [currentValue, brCode]);
   const handleOutsideClick = () => {
     setShowPix(false);
   };
@@ -189,7 +209,9 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
             <Text isDark={DarkCondition}>
               Envie o código do Pix Copia e Cola com quem vai pagar
             </Text>
-            <QRCode value={brCode} />
+            <div ref={qrCodeRef}>
+              <QRCode value={brCode} size={170} />
+            </div>
 
             <ButtonCopy isDark={DarkCondition} onClick={copyToClipboard}>
               <Image image="copy-full-white.png" alt="" />
