@@ -23,9 +23,9 @@ const ImageAlt = styled(Image)`
   height: 30px;
 `;
 const ImageLabel = styled(Image)`
-  width: 90px;
-  height: 80px;
-  background: purple;
+  width: 100px;
+  height: 90px;
+
   border-radius: 54px;
   position: absolute;
   left: 37%;
@@ -81,9 +81,14 @@ export default function About({
   location,
   description,
   number,
+  image,
 }) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark";
+  const API_URL = process.env.NEXT_PUBLIC_URL_API;
+
+  const imageFormatted = image?.split("\\").pop();
+  const imageProfile = `${API_URL}/uploads/${imageFormatted}`;
 
   const handleDownloadVCard = () => {
     const currentNumber = number?.startsWith("+") ? number : "+" + number;
@@ -109,6 +114,7 @@ export default function About({
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
+
   return (
     <AboutContainer isDark={DarkCondition}>
       <StyledFlexImages>
@@ -118,7 +124,7 @@ export default function About({
           image="shareLight.png"
           alt=""
         />
-        <ImageLabel image="next.svg" />
+        <ImageLabel image={imageProfile} />
         <ImageAlt
           isDark={DarkCondition}
           imageDark="phone.png"

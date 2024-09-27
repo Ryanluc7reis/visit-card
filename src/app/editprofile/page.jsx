@@ -51,6 +51,7 @@ export default function EditProfilePage() {
   const [error, setError] = useState(false);
   const [linksData, setlinksData] = useState([]);
   const [linkId, setLinkId] = useState(null);
+  const [errorPopUp, setErrorPopUp] = useState(false);
   const [userData, setUserData] = useState(null);
   const [newLinks, setNewLinks] = useState([{ app: "-", url: "-" }]);
   const links = newLinks.map((link) => ({
@@ -143,6 +144,15 @@ export default function EditProfilePage() {
     getAbout();
     getLinks();
     setLoadingScreen(false);
+    if (
+      messageType === "notAuthenticated" ||
+      messageType === "alreadyHasImage" ||
+      messageType === "notFoundImage"
+    ) {
+      setErrorPopUp(true);
+    } else {
+      setErrorPopUp(false);
+    }
 
     setTimeout(() => {
       setShowPopUp(false);
@@ -158,13 +168,15 @@ export default function EditProfilePage() {
       {showPopUp && (
         <PopUpMessage
           error={messageType === "error" ? true : false}
-          error2={messageType === "notAuthenticated" ? true : false}
+          error2={errorPopUp}
         >
           {messageType === "created" && "Link criado com sucesso"}
           {messageType === "notAuthenticated" && "Usuário não autenticado"}
           {messageType === "deleted" && "Link deletado com sucesso"}
           {messageType === "edited" && "Perfil editado com sucesso"}
           {messageType === "error" && "Algo deu errado"}
+          {messageType === "notFoundImage" && "Nenhuma imagem foi enviada"}
+          {messageType === "alreadyHasImage" && "Já existe essa imagem"}
         </PopUpMessage>
       )}
       <title>{fullName && `Editando perfil / ${fullName} `}</title>
@@ -196,6 +208,7 @@ export default function EditProfilePage() {
             companyName={aboutData.companyName}
             location={aboutData.location}
             description={aboutData.description}
+            imageName={aboutData.imageName}
             onSave={handleSaveEditCard}
           />
         )}

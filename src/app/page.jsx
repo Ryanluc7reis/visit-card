@@ -166,6 +166,7 @@ export default function Home() {
             location={aboutData.location}
             description={aboutData.description}
             number={aboutData.number}
+            image={aboutData.imagePath}
           />
         )}
 
