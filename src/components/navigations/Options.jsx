@@ -143,9 +143,15 @@ export default function Options({ hasUser, hasAbout, logOut }) {
       console.error("Erro durante o logout:", error);
     }
   };
-
+  const handleOutsideClick = () => {
+    setShowSelectColor(false);
+  };
+  const handleColorClick = (e) => {
+    setShowSelectColor(!showSelectColor);
+    e.stopPropagation();
+  };
   return (
-    <MenuContainer isDark={DarkCondition}>
+    <MenuContainer onClick={handleOutsideClick} isDark={DarkCondition}>
       {hasUser ? (
         <>
           <NameUser isDark={DarkCondition}>Olá, {hasUser}</NameUser>
@@ -177,10 +183,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
               </Option>
             )}
 
-            <OptionAlt
-              isDark={DarkCondition}
-              onClick={() => setShowSelectColor(!showSelectColor)}
-            >
+            <OptionAlt isDark={DarkCondition} onClick={handleColorClick}>
               Modo escuro
               <p style={{ color: "#707070", fontSize: "16px" }}>
                 {theme === "dark" ? "Ativado" : "Desativado"}
@@ -229,10 +232,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
           <Option isDark={DarkCondition} onClick={() => router.push("/signup")}>
             Cadastrar-se
           </Option>
-          <OptionAlt
-            isDark={DarkCondition}
-            onClick={() => setShowSelectColor(!showSelectColor)}
-          >
+          <OptionAlt isDark={DarkCondition} onClick={handleColorClick}>
             Modo escuro
             <p style={{ color: "#707070", fontSize: "16px" }}>
               {theme === "dark" ? "Ativado" : "Desativado"}
