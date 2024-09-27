@@ -23,27 +23,28 @@ const ImageAlt = styled(Image)`
   height: 30px;
 `;
 const ImageLabel = styled(Image)`
-  width: 100px;
-  height: 90px;
+  width: 110px;
+  height: 113px;
+  margin-bottom: 30px;
 
   border-radius: 54px;
   position: absolute;
-  left: 37%;
+  left: 34%;
 
   @media (min-width: 375px) {
-    left: 39%;
+    left: 36%;
   }
   @media (min-width: 425px) {
-    left: 41%;
+    left: 38%;
   }
   @media (min-width: 768px) {
-    left: 45%;
+    left: 43%;
   }
   @media (min-width: 1024px) {
-    left: 46%;
+    left: 45%;
   }
   @media (min-width: 1349px) {
-    left: 47%;
+    left: 46%;
   }
 `;
 const StyledFlexImages = styled.div`
@@ -85,10 +86,6 @@ export default function About({
 }) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark";
-  const API_URL = process.env.NEXT_PUBLIC_URL_API;
-
-  const imageFormatted = image?.split("\\").pop();
-  const imageProfile = `${API_URL}/uploads/${imageFormatted}`;
 
   const handleDownloadVCard = () => {
     const currentNumber = number?.startsWith("+") ? number : "+" + number;
@@ -124,7 +121,7 @@ export default function About({
           image="shareLight.png"
           alt=""
         />
-        <ImageLabel image={imageProfile} />
+        <ImageLabel image={image} />
         <ImageAlt
           isDark={DarkCondition}
           imageDark="phone.png"

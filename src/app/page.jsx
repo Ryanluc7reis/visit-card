@@ -69,8 +69,6 @@ export default function Home() {
     },
   };
 
-  const fullName = userData && userData.fullName;
-
   const getCard = async () => {
     try {
       const response = await axios.get(`${API_URL}/card/ryan1`);
@@ -83,6 +81,7 @@ export default function Home() {
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
+
   const verifyUser = async () => {
     try {
       const response = await axios.get(
@@ -110,6 +109,10 @@ export default function Home() {
   }
   const pixLinks = linksData.filter((link) => link.app === "Pix");
   const pixLocation = getFormattedLocation(aboutData?.location);
+  const fullName = userData && userData.fullName;
+  const imageBase64 =
+    aboutData &&
+    `data:${aboutData.contentType};base64,${Buffer.from(aboutData.imageData.data).toString("base64")}`;
 
   useEffect(() => {
     getCard();
@@ -166,7 +169,7 @@ export default function Home() {
             location={aboutData.location}
             description={aboutData.description}
             number={aboutData.number}
-            image={aboutData.imagePath}
+            image={imageBase64}
           />
         )}
 
