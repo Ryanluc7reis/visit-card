@@ -26,12 +26,12 @@ const ImageLabel = styled(Image)`
   width: 110px;
   height: 113px;
   margin-bottom: 30px;
-
   border-radius: 54px;
   position: absolute;
   left: 34%;
+
   @media (min-width: 340px) {
-    left: 36%;
+    left: 35%;
   }
   @media (min-width: 375px) {
     left: 36%;
