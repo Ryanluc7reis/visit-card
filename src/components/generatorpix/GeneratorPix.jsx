@@ -83,6 +83,7 @@ const StyledFlexButtonToBack = styled.div`
   align-items: start;
   text-align: center;
 `;
+const ImageAlt = styled(Image)``;
 export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
   const { theme } = useTheme();
   const { setShowPopUp, setMessageType } = usePopUp();
@@ -189,13 +190,15 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
         ) : (
           <>
             <StyledFlexButtonToBack onClick={() => setCurrentValue(false)}>
-              <Image
+              <ImageAlt
                 isDark={DarkCondition}
                 image="left-arrow-white.png"
                 imageDark="left-arrow-dark.png"
                 alt=""
               />
-              <Text isDark={DarkCondition}>Voltar</Text>
+              <Text style={{ marginTop: "2px" }} isDark={DarkCondition}>
+                Voltar
+              </Text>
             </StyledFlexButtonToBack>
 
             <Text isDark={DarkCondition}>

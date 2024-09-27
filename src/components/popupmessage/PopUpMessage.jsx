@@ -26,11 +26,14 @@ const BoxMessage = styled.div`
   z-index: 100;
   position: fixed;
   top: 2%;
-  left: 6%;
+  left: 7%;
   animation: ${(props) => props.request && slideDown} 0.3s forwards;
   transform-origin: top;
   visibility: ${(props) => (props.request ? "visible" : "hidden")};
 
+  @media (min-width: 340px) {
+    left: 10%;
+  }
   @media (min-width: 375px) {
     left: 13%;
   }
