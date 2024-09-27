@@ -91,8 +91,8 @@ export default function EditProfilePage() {
       }
     } catch (err) {
       if (
-        err.response.data.message === "Token não fornecido" ||
-        "Falha ao autenticar token"
+        (err.response && err.response.data.message === "Token não fornecido") ||
+        err.response.data.message === "Falha ao autenticar token"
       ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");

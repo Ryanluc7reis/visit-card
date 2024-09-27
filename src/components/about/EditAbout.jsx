@@ -126,7 +126,10 @@ export default function EditAbout({
         setEditImage(false);
       }
     } catch (err) {
-      if (err.response.data.message === "Falha ao autenticar o token") {
+      if (
+        err.response &&
+        err.response.data.message === "Falha ao autenticar o token"
+      ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
       } else if (err.response.data.message === "Nenhuma imagem foi enviada") {

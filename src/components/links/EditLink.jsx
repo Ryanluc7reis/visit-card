@@ -114,7 +114,7 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
       }
     } catch (err) {
       if (
-        err.response.data.message === "Token não fornecido" ||
+        (err.response && err.response.data.message === "Token não fornecido") ||
         "Falha ao autenticar token"
       ) {
         setShowPopUp(true);
@@ -141,7 +141,7 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
       }
     } catch (err) {
       if (
-        err.response.data.message === "Token não fornecido" ||
+        (err.response && err.response.data.message === "Token não fornecido") ||
         "Falha ao autenticar token"
       ) {
         setShowPopUp(true);
