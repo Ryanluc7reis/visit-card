@@ -27,8 +27,16 @@ const Form = styled.form`
 const InputAlt = styled(Input)`
   background: transparent;
   border: none;
-  border-bottom: 1px solid
-    ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
+  border-bottom: 2px solid
+    ${(props) => {
+      const isEmptyObject = (obj) => Object.keys(obj).length === 0;
+
+      if (props.error && !isEmptyObject(props.error)) {
+        return props.theme.error;
+      }
+
+      return props.isDark ? props.theme.textDark : props.theme.textDark;
+    }};
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
@@ -45,7 +53,11 @@ const ButtonEditImage = styled.h5`
     color: black;
   }
 `;
-
+const ErrorMessage = styled.span`
+  color: ${(props) => props.theme.error};
+  font-weight: bold;
+  font-size: 13px;
+`;
 export default function EditAbout({
   id,
   name,
@@ -58,6 +70,7 @@ export default function EditAbout({
   const { theme } = useTheme();
   const { setShowPopUp, setMessageType, messageType } = usePopUp();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({});
   const [editImage, setEditImage] = useState(false);
   const [formData, setFormData] = useState({
     id: id,
@@ -138,6 +151,12 @@ export default function EditAbout({
       } else if (err.response.data.message === "Já existe essa imagem") {
         setShowPopUp(true);
         setMessageType("alreadyHasImage");
+      } else if (err.response.data.errors) {
+        const field = err.response.data.errors[0].field;
+        setError({
+          ...error,
+          [field]: err.response.data.errors[0].message,
+        });
       } else {
         setShowPopUp(true);
         setMessageType("error");
@@ -170,13 +189,16 @@ export default function EditAbout({
         onChange={handleChange}
         value={formData.description}
       />
+
       <InputAlt
         isDark={DarkCondition}
         label="Localização"
         name="location"
         onChange={handleChange}
         value={formData.location}
+        error={error.location}
       />
+      {error.location && <ErrorMessage>{error.location}</ErrorMessage>}
 
       <InputAlt
         isDark={DarkCondition}

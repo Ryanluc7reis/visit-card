@@ -28,9 +28,9 @@ const Form = styled.form`
 const InputAlt = styled(Input)`
   background: transparent;
   border: none;
+  border-bottom: 2px solid
+    ${(props) => (props.isDark ? props.theme.textDark : props.theme.textDark)};
 
-  border-bottom: 1px solid
-    ${(props) => (props.isDark ? props.theme.textDark : "#696565")};
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
@@ -59,11 +59,17 @@ const LinkItem = styled.div`
     gap: 78px;
   }
 `;
+const ErrorMessage = styled.span`
+  color: ${(props) => props.theme.error};
+  font-weight: bold;
+  font-size: 13px;
+`;
 
 export default function EditLink({ id, linkId, app, url, onSave }) {
   const { theme } = useTheme();
   const { setShowPopUp, setMessageType } = usePopUp();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({});
   const [formData, setFormData] = useState({
     id: id,
     linkId: linkId,
@@ -111,14 +117,22 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
         onSave();
         setShowPopUp(true);
         setMessageType("edited");
+        setError({});
       }
     } catch (err) {
       if (
         (err.response && err.response.data.message === "Token não fornecido") ||
-        "Falha ao autenticar token"
+        err.response.data.message === "Falha ao autenticar token"
       ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
+      }
+      if (err.response.data.errors) {
+        const field = err.response.data.errors[0].field;
+        setError({
+          ...error,
+          [field]: err.response.data.errors[0].message,
+        });
       } else {
         setShowPopUp(true);
         setMessageType("error");
@@ -142,7 +156,7 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
     } catch (err) {
       if (
         (err.response && err.response.data.message === "Token não fornecido") ||
-        "Falha ao autenticar token"
+        err.response.data.message === "Falha ao autenticar token"
       ) {
         setShowPopUp(true);
         setMessageType("notAuthenticated");
@@ -167,10 +181,11 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
         />
         <div style={{ display: "flex", alignItems: "end" }}>
           <InputLink
-            label="Link"
+            label={app === "Pix" ? "Chave pix" : "Link"}
             isDark={DarkCondition}
             name="url"
             value={formData.url}
+            error={formData.url}
             onChange={handleChange}
           />
 
@@ -183,6 +198,7 @@ export default function EditLink({ id, linkId, app, url, onSave }) {
           />
         </div>
       </LinkItem>
+      {error.url && <ErrorMessage>{error.url}</ErrorMessage>}
 
       <div style={{ width: "100%", textAlign: "center" }}>
         <Button type="submit" loading={loading}>
