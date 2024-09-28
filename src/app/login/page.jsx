@@ -91,6 +91,8 @@ export default function LoginPage() {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
+  const URL = process.env.NEXT_PUBLIC_URL;
+  const linkCurrent = `${URL}/${userData && userData.user}`;
   const configAuth = {
     headers: {
       [AUTH_NAME]: token,
@@ -104,8 +106,9 @@ export default function LoginPage() {
       const response = await axios.post(`${API_URL}/user/login`, formData);
       const { token } = response.data;
       localStorage.setItem("token", token);
-      if (response.status === 200) {
-        router.push("/");
+      await verifyUser();
+      if (userData && response.status === 200) {
+        router.push(linkCurrent);
       }
     } catch (err) {
       if (err.response && err.response.data === "password incorrect") {
@@ -124,17 +127,19 @@ export default function LoginPage() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    const trimmedValue = value.trim();
 
     if (name) {
-      const isValidValue = [!value];
+      const isValidValue = [!trimmedValue];
       setError((prevErrors) => ({
         ...prevErrors,
         [name]: isValidValue === true && null,
       }));
     }
+
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: trimmedValue,
     });
   };
 
@@ -216,7 +221,11 @@ export default function LoginPage() {
             <HaveAccount isDark={DarkCondition}>Não possui conta ?</HaveAccount>
             <h4
               onClick={() => router.push("/signup")}
-              style={{ textDecoration: "underline", cursor: "pointer" }}
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "#a1a1a1",
+              }}
             >
               Fazer cadastro
             </h4>

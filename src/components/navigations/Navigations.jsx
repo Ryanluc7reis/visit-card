@@ -38,6 +38,8 @@ export default function Navigations({ hasUser }) {
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const URL = process.env.NEXT_PUBLIC_URL;
+  const linkCurrent = `${URL}/${userData && userData.user}`;
   const configAuth = {
     headers: {
       [AUTH_NAME]: token,
@@ -67,7 +69,13 @@ export default function Navigations({ hasUser }) {
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
-
+  const handleRedirect = () => {
+    if (userData) {
+      router.push(linkCurrent);
+    } else {
+      router.push("/");
+    }
+  };
   useEffect(() => {
     verifyUser();
     getAbout();
@@ -75,7 +83,7 @@ export default function Navigations({ hasUser }) {
 
   return (
     <NavContainer isDark={DarkCondition}>
-      <Logo onClick={() => router.push("/")} isDark={DarkCondition}>
+      <Logo onClick={handleRedirect} isDark={DarkCondition}>
         HelloVisit
       </Logo>
       {isMenu && (

@@ -104,9 +104,10 @@ export default function SignupPage() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    const trimmedValue = value.trim();
 
     if (name) {
-      const isValidValue = [!value];
+      const isValidValue = [!trimmedValue];
       setError((prevErrors) => ({
         ...prevErrors,
         [name]: isValidValue === true && null,
@@ -115,10 +116,9 @@ export default function SignupPage() {
 
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: trimmedValue,
     });
   };
-
   const handleForm = async (e) => {
     e.preventDefault();
     try {
@@ -275,7 +275,11 @@ export default function SignupPage() {
             <HaveAccount isDark={DarkCondition}>Já possui conta ?</HaveAccount>
             <h4
               onClick={() => router.push("/login")}
-              style={{ textDecoration: "underline", cursor: "pointer" }}
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "#a1a1a1",
+              }}
             >
               Entrar
             </h4>
