@@ -123,6 +123,8 @@ export default function Options({ hasUser, hasAbout, logOut }) {
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const URL = process.env.NEXT_PUBLIC_URL;
+  const linkCurrent = `${URL}/${hasAbout}`;
   const configAuth = {
     headers: {
       [AUTH_NAME]: token,
@@ -170,7 +172,10 @@ export default function Options({ hasUser, hasAbout, logOut }) {
                 >
                   Editar perfil
                 </Option>
-                <Option isDark={DarkCondition} onClick={() => router.push("/")}>
+                <Option
+                  isDark={DarkCondition}
+                  onClick={() => router.push(linkCurrent)}
+                >
                   Minha página
                 </Option>
               </>

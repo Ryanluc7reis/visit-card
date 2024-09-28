@@ -72,6 +72,7 @@ export default function Navigations({ hasUser }) {
     verifyUser();
     getAbout();
   }, [isMenu]);
+
   return (
     <NavContainer isDark={DarkCondition}>
       <Logo onClick={() => router.push("/")} isDark={DarkCondition}>
@@ -82,7 +83,7 @@ export default function Navigations({ hasUser }) {
           {hasUser ? (
             <Options
               hasUser={userData && userData.fullName}
-              hasAbout={hasAbout}
+              hasAbout={hasAbout && hasAbout.createdBy}
               logOut={() => setUserData(null)}
             />
           ) : (
