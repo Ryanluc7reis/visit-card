@@ -9,7 +9,7 @@ import Image from "../image/Image";
 import { Input } from "../form/Input";
 import { Button } from "../form/Button";
 
-const ContainerPix = styled.div`
+const Container = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -53,6 +53,7 @@ const ButtonCopy = styled.div`
   display: flex;
   gap: 7px;
   align-items: center;
+  cursor: pointer;
 
   :hover {
     background-color: "#677db7";
@@ -83,7 +84,7 @@ const StyledFlexButtonToBack = styled.div`
   align-items: start;
   text-align: center;
 `;
-const ImageAlt = styled(Image)``;
+
 export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
   const { theme } = useTheme();
   const { setShowPopUp, setMessageType } = usePopUp();
@@ -172,12 +173,12 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
   };
 
   return (
-    <ContainerPix onClick={handleOutsideClick}>
+    <Container onClick={handleOutsideClick}>
       <BoxPix onClick={(e) => e.stopPropagation()} isDark={DarkCondition}>
         {!currentValue ? (
           <>
             <Text isDark={DarkCondition}>
-              Digite o valor da transação e copie o código Pix Copia e Cola
+              Digite o valor da transação e copie o código Pix Copia e Cola :
             </Text>
 
             <InputValue
@@ -190,7 +191,7 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
         ) : (
           <>
             <StyledFlexButtonToBack onClick={() => setCurrentValue(false)}>
-              <ImageAlt
+              <Image
                 isDark={DarkCondition}
                 image="left-arrow-white.png"
                 imageDark="left-arrow-dark.png"
@@ -202,7 +203,7 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
             </StyledFlexButtonToBack>
 
             <Text isDark={DarkCondition}>
-              Envie o código do Pix Copia e Cola com quem vai pagar
+              Envie o código do Pix Copia e Cola com quem vai pagar !
             </Text>
             <div ref={qrCodeRef}>
               <QRCode value={brCode} size={170} />
@@ -220,6 +221,6 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
           </>
         )}
       </BoxPix>
-    </ContainerPix>
+    </Container>
   );
 }

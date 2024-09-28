@@ -85,6 +85,7 @@ export default function About({
   description,
   number,
   image,
+  setShowLink,
 }) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark";
@@ -113,7 +114,9 @@ export default function About({
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
-
+  const handleShowLink = () => {
+    setShowLink(true);
+  };
   return (
     <AboutContainer isDark={DarkCondition}>
       <StyledFlexImages>
@@ -122,6 +125,7 @@ export default function About({
           imageDark="share.png"
           image="shareLight.png"
           alt=""
+          onClick={handleShowLink}
         />
         <ImageLabel image={image} />
         <ImageAlt
