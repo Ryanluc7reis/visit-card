@@ -50,7 +50,7 @@ const ButtonCopy = styled.div`
   width: 180px;
   transition: all 200ms ease-in-out;
   display: flex;
-  gap: 12px;
+  gap: 21px;
   text-align: center;
   align-items: center;
   cursor: pointer;
@@ -129,7 +129,6 @@ export default function GeneratorPageLink({ setShowLink, setLinkCurrent }) {
       navigator
         .share({
           title: "Compartilhar Link",
-          text: "Aqui está o link gerado.",
           url: linkCurrent,
         })
         .then(() => console.log("Compartilhamento concluído com sucesso"))

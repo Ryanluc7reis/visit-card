@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
 import Image from "../image/Image";
+import { useEffect, useState } from "react";
 
 const AboutContainer = styled.div`
   width: 90%;
@@ -77,7 +78,44 @@ const Description = styled.h4`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
+const Options = styled.div`
+  position: absolute;
+  margin-top: 110px;
+  width: auto;
+  right: 11%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid
+    ${(props) => (props.isDark ? props.theme.textDark : props.theme.textLight)};
 
+  background-color: ${(props) =>
+    props.isDark
+      ? props.theme.backgroundContentDark
+      : props.theme.backgroundContentDark};
+
+  @media (min-width: 768px) {
+    right: 15%;
+  }
+  @media (min-width: 1024px) {
+    right: 24%;
+  }
+  @media (min-width: 1349px) {
+    right: 30%;
+  }
+`;
+const Text = styled.h5`
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+  font-weight: 400;
+  padding: 10px;
+`;
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+`;
 export default function About({
   name,
   companyName,
@@ -89,10 +127,10 @@ export default function About({
 }) {
   const { theme } = useTheme();
   const DarkCondition = theme === "dark";
+  const [showOptions, setShowOptions] = useState(false);
+  const currentNumber = number?.startsWith("+") ? number : "+" + number;
 
   const handleDownloadVCard = () => {
-    const currentNumber = number?.startsWith("+") ? number : "+" + number;
-
     const vCardData = [
       "BEGIN:VCARD",
       "VERSION:3.0",
@@ -117,8 +155,12 @@ export default function About({
   const handleShowLink = () => {
     setShowLink(true);
   };
+
   return (
-    <AboutContainer isDark={DarkCondition}>
+    <AboutContainer
+      onClick={() => setShowOptions(!showOptions)}
+      isDark={DarkCondition}
+    >
       <StyledFlexImages>
         <ImageAlt
           isDark={DarkCondition}
@@ -133,8 +175,19 @@ export default function About({
           imageDark="phone.png"
           image="phoneLight.png"
           alt=""
-          onClick={handleDownloadVCard}
+          onClick={() => setShowOptions(!showOptions)}
         />
+        {showOptions && (
+          <Options isDark={DarkCondition}>
+            <Text onClick={handleDownloadVCard} isDark={DarkCondition}>
+              Salvar número na conta
+            </Text>
+            <Line isDark={DarkCondition} />
+            <Text isDark={DarkCondition} as="a" href={`tel:${currentNumber}`}>
+              Ir com o número para o teclado
+            </Text>
+          </Options>
+        )}
       </StyledFlexImages>
 
       <StyledFlexDescription>
