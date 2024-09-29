@@ -104,11 +104,12 @@ const Options = styled.div`
     right: 30%;
   }
 `;
-const Text = styled.h5`
+const Text = styled.a`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
   font-weight: 400;
   padding: 10px;
+  text-decoration: none;
 `;
 const Line = styled.div`
   width: 100%;
@@ -180,10 +181,10 @@ export default function About({
         {showOptions && (
           <Options isDark={DarkCondition}>
             <Text onClick={handleDownloadVCard} isDark={DarkCondition}>
-              Salvar número na conta
+              Salvar contato direto na conta
             </Text>
             <Line isDark={DarkCondition} />
-            <Text isDark={DarkCondition} as="a" href={`tel:${currentNumber}`}>
+            <Text isDark={DarkCondition} href={`tel:${currentNumber}`}>
               Ir com o número para o teclado
             </Text>
           </Options>
