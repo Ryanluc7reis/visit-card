@@ -170,7 +170,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
                   isDark={DarkCondition}
                   onClick={() => router.push("/editprofile")}
                 >
-                  Editar perfil
+                  Editar página
                 </Option>
                 <Option
                   isDark={DarkCondition}
@@ -184,7 +184,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
                 isDark={DarkCondition}
                 onClick={() => router.push("/createprofile")}
               >
-                Criar meus links
+                Criar página
               </Option>
             )}
 

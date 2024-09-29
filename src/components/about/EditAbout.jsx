@@ -207,7 +207,7 @@ export default function EditAbout({
 
       <InputAlt
         isDark={DarkCondition}
-        label="Imagem de perfil"
+        label="Imagem de sobre"
         value={imageName}
       />
       <ButtonEditImage

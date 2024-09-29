@@ -57,6 +57,7 @@ export default function ProfilePage() {
   const { messageType, showPopUp, setShowPopUp, setMessageType } = usePopUp();
   const [aboutData, setAboutData] = useState(null);
   const [error, setError] = useState(false);
+  const [errorCard, setErrorCard] = useState(false);
   const [linksData, setlinksData] = useState([]);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [userData, setUserData] = useState(null);
@@ -83,6 +84,12 @@ export default function ProfilePage() {
       setAboutData(data.about[0]);
       setlinksData(data.links[0].links);
     } catch (error) {
+      if (
+        error.response &&
+        error.response.data.message === "Card não encontrado"
+      ) {
+        setErrorCard(true);
+      }
       setError(true);
       console.error("Erro ao obter os dados do cartão:", error);
     }
@@ -153,17 +160,24 @@ export default function ProfilePage() {
         {aboutData === null ? (
           <>
             {error ? (
-              <StyledFlexErrorMessage>
-                <ErrorMessage isDark={DarkCondition}>
-                  Erro ao obter dados
-                </ErrorMessage>
-                <Image
-                  isDark={DarkCondition}
-                  imageDark="badEmoji-dark.png"
-                  image="badEmoji-white.png"
-                  alt=""
-                />
-              </StyledFlexErrorMessage>
+              <>
+                {errorCard && (
+                  <h3 style={{ color: "red" }}>
+                    Crie sua página para ler seus dados
+                  </h3>
+                )}
+                <StyledFlexErrorMessage>
+                  <ErrorMessage isDark={DarkCondition}>
+                    Erro ao obter dados
+                  </ErrorMessage>
+                  <Image
+                    isDark={DarkCondition}
+                    imageDark="badEmoji-dark.png"
+                    image="badEmoji-white.png"
+                    alt=""
+                  />
+                </StyledFlexErrorMessage>
+              </>
             ) : (
               <LoadingScreen loadingContent />
             )}

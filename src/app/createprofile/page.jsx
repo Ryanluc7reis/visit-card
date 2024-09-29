@@ -115,6 +115,7 @@ export default function CreateProfilePage() {
     companyName: "",
     location: "",
     description: "",
+    image: null,
   });
 
   const DarkCondition = theme === "dark" ? true : false;
@@ -123,6 +124,7 @@ export default function CreateProfilePage() {
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const AUTH_NAME = process.env.NEXT_PUBLIC_SESSION_TOKEN_NAME;
   const API_URL = process.env.NEXT_PUBLIC_URL_API;
+  const URL = process.env.NEXT_PUBLIC_URL;
   const configAuth = {
     headers: {
       [AUTH_NAME]: token,
@@ -155,39 +157,62 @@ export default function CreateProfilePage() {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+    let adjustedValue = value;
+    if (name === "location") {
+      adjustedValue = value.replace(/,(\S)/g, ", $1");
+    }
+
     if (name) {
-      const isValidValue = [!value];
+      const isValidValue = [!adjustedValue];
       setError((prevErrors) => ({
         ...prevErrors,
         [name]: isValidValue === true && null,
       }));
     }
+
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: adjustedValue,
+    });
+  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    setFormData({
+      ...formData,
+      image: file,
     });
   };
 
   const handleForm = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    const formDataToSend = new FormData();
+    formDataToSend.append("companyName", formData.companyName);
+    formDataToSend.append("location", formData.location);
+    formDataToSend.append("description", formData.description);
+    if (formData.image) {
+      formDataToSend.append("image", formData.image);
+    } else {
+      console.log("Imagem não encontrada!");
+    }
     try {
-      setLoading(true);
-      const createLink = await axios.post(
-        `${API_URL}/card/createLink`,
-        { links },
-        configAuth
-      );
-
       const createAbout = await axios.post(
         `${API_URL}/card/createAbout`,
-        formData,
+        formDataToSend,
         configAuth
       );
-
-      if (createLink.status && createAbout.status === 201) {
-        router.push("/");
-        setShowPopUp(true);
-        setMessageType("createdProfile");
+      if (createAbout.status === 201) {
+        const createLink = await axios.post(
+          `${API_URL}/card/createLink`,
+          { links },
+          configAuth
+        );
+        if (createLink.status === 201) {
+          router.push(`${URL}/${userData?.user}`);
+          setShowPopUp(true);
+          setMessageType("createdProfile");
+        }
       }
     } catch (err) {
       if (
@@ -234,7 +259,7 @@ export default function CreateProfilePage() {
       const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
       const data = response.data;
       if (data) {
-        router.push("/");
+        router.push(`${URL}/${userData?.user}`);
         setTimeout(() => {
           setMessageType("hasProfile");
           setShowPopUp(true);
@@ -244,6 +269,7 @@ export default function CreateProfilePage() {
       console.error("Erro ao obter os dados do cartão:", error);
     }
   };
+
   const verifyUser = async () => {
     try {
       const response = await axios.get(
@@ -316,6 +342,14 @@ export default function CreateProfilePage() {
             value={formData.description}
             required
           />
+          <InputAlt
+            isDark={DarkCondition}
+            label="Imagem de sobre"
+            type="file"
+            name="image"
+            onChange={handleFileChange}
+            required
+          />
         </BoxContainer>
         <TitleSection isDark={DarkCondition}>Crie seus links</TitleSection>
         <BoxContainer isDark={DarkCondition}>
@@ -336,7 +370,7 @@ export default function CreateProfilePage() {
                   style={{ display: "flex", alignItems: "end", width: "100%" }}
                 >
                   <InputLink
-                    label="Seu link"
+                    label={link.app === "Pix" ? "Chave Pix " : "Link"}
                     placeholder={
                       link.app === "Pix"
                         ? "Cole sua chave PIX aqui"
