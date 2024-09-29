@@ -99,8 +99,10 @@ export default function EditAbout({
       [name]: value,
     });
   };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
     setFormData({
       ...formData,
       image: file,
@@ -118,7 +120,10 @@ export default function EditAbout({
     formDataToSend.append("description", formData.description);
     if (formData.image) {
       formDataToSend.append("image", formData.image);
+    } else {
+      console.log("Imagem não encontrada!");
     }
+
     try {
       const { status } = await axios.patch(
         `${API_URL}/card/editAbout`,
