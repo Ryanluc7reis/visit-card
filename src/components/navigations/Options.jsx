@@ -163,7 +163,7 @@ export default function Options({ hasUser, hasAbout, logOut }) {
               borderTop: "1px solid #a3a3a379",
             }}
           >
-            {/* <Option isDark={DarkCondition}>Sobre nós</Option>*/}
+            <Option isDark={DarkCondition}>Sobre nós</Option>
             <Option
               isDark={DarkCondition}
               onClick={() => router.push("/editprofile")}
@@ -238,8 +238,8 @@ export default function Options({ hasUser, hasAbout, logOut }) {
             borderTop: "1px solid #a3a3a379",
           }}
         >
-          {/*<Option isDark={DarkCondition}>Comprar cartão</Option>*/}
-          {/* <Option isDark={DarkCondition}>Sobre nós</Option>*/}
+          <Option isDark={DarkCondition}>Comprar cartão</Option>
+          <Option isDark={DarkCondition}>Sobre nós</Option>
           <Option isDark={DarkCondition} onClick={() => router.push("/signup")}>
             Cadastrar-se
           </Option>
