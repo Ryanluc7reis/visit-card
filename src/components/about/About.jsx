@@ -92,7 +92,7 @@ const Options = styled.div`
   background-color: ${(props) =>
     props.isDark
       ? props.theme.backgroundContentDark
-      : props.theme.backgroundContentDark};
+      : props.theme.backgroundContentLight};
 
   @media (min-width: 768px) {
     right: 15%;
@@ -110,12 +110,16 @@ const Text = styled.a`
   font-weight: 400;
   padding: 10px;
   text-decoration: none;
+  cursor: pointer;
+  :hover {
+    color: #797474;
+  }
 `;
 const Line = styled.div`
   width: 100%;
   height: 1px;
-  background: ${(props) =>
-    props.isDark ? props.theme.textDark : props.theme.textLight};
+  background-color: ${(props) =>
+    props.isDark ? props.theme.textDark : " black"};
 `;
 export default function About({
   name,
@@ -156,7 +160,9 @@ export default function About({
   const handleShowLink = () => {
     setShowLink(true);
   };
-
+  const handleRedirectNumber = () => {
+    window.location.href(`tel:${currentNumber}`);
+  };
   return (
     <AboutContainer
       onClick={() => setShowOptions(!showOptions)}
@@ -184,7 +190,7 @@ export default function About({
               Salvar contato direto na conta
             </Text>
             <Line isDark={DarkCondition} />
-            <Text isDark={DarkCondition} href={`tel:${currentNumber}`}>
+            <Text isDark={DarkCondition} onClick={handleRedirectNumber}>
               Ir com o número para o teclado
             </Text>
           </Options>

@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 import { useRouter } from "next/navigation";
@@ -163,12 +163,18 @@ export default function Options({ hasUser, hasAbout, logOut }) {
               borderTop: "1px solid #a3a3a379",
             }}
           >
-            <Option isDark={DarkCondition}>Sobre nós</Option>
+            {/* <Option isDark={DarkCondition}>Sobre nós</Option>*/}
+            <Option
+              isDark={DarkCondition}
+              onClick={() => router.push("/editprofile")}
+            >
+              Editar perfil
+            </Option>
             {hasAbout ? (
               <>
                 <Option
                   isDark={DarkCondition}
-                  onClick={() => router.push("/editprofile")}
+                  onClick={() => router.push("/editpage")}
                 >
                   Editar página
                 </Option>
@@ -232,8 +238,8 @@ export default function Options({ hasUser, hasAbout, logOut }) {
             borderTop: "1px solid #a3a3a379",
           }}
         >
-          <Option isDark={DarkCondition}>Comprar cartão</Option>
-          <Option isDark={DarkCondition}>Sobre nós</Option>
+          {/*<Option isDark={DarkCondition}>Comprar cartão</Option>*/}
+          {/* <Option isDark={DarkCondition}>Sobre nós</Option>*/}
           <Option isDark={DarkCondition} onClick={() => router.push("/signup")}>
             Cadastrar-se
           </Option>

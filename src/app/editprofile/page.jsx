@@ -8,8 +8,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Navigations from "@/components/navigations/Navigations";
-import EditAbout from "@/components/about/EditAbout";
-import EditLink from "@/components/links/EditLink";
+import { Button } from "@/components/form/Button";
+import { Input } from "@/components/form/Input";
 import Image from "@/components/image/Image";
 import PopUpMessage from "@/components/popupmessage/PopUpMessage";
 import LoadingScreen from "@/components/loadingscreen/Loadingscreen";
@@ -21,11 +21,41 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px 0px;
-  gap: 25px;
   background: ${(props) =>
     props.isDark ? props.theme.backgroundDark : props.theme.backgroundLight};
 `;
+const Form = styled.form`
+  width: 90%;
+  min-height: 180px;
+  padding: 15px;
+  background: ${(props) =>
+    props.isDark
+      ? props.theme.backgroundContentDark
+      : props.theme.backgroundContentLight};
+  border: 1px solid
+    ${(props) =>
+      props.isDark ? props.theme.borderDark : props.theme.borderLight};
+  border-radius: 6px;
+  @media (min-width: 768px) {
+    width: 600px;
+  }
+`;
+const InputAlt = styled(Input)`
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid
+    ${(props) => {
+      const isEmptyObject = (obj) => Object.keys(obj).length === 0;
 
+      if (props.error && !isEmptyObject(props.error)) {
+        return props.theme.error;
+      }
+
+      return props.isDark ? props.theme.textDark : props.theme.textDark;
+    }};
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+`;
 const Title = styled.h3`
   font-weight: bold;
   margin: 7px 0;
@@ -33,31 +63,46 @@ const Title = styled.h3`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
-const ErrorMessage = styled.h3`
-  color: ${(props) =>
-    props.isDark ? props.theme.textDark : props.theme.textLight};
+const ErrorMessage = styled.span`
+  color: ${(props) => props.theme.error};
+  font-weight: bold;
+  font-size: 13px;
 `;
 const StyledFlexErrorMessage = styled.div`
   display: flex;
   gap: 7px;
+`;
+const ButtonEditPassword = styled.h5`
+  color: ${(props) =>
+    props.isDark ? props.theme.textDark : props.theme.textLight};
+  padding: 5px;
+  border-radius: 4px;
+  text-decoration: underline;
+  font-weight: 400;
+  font-size: 12px;
+  cursor: pointer;
+  :active {
+    color: black;
+  }
 `;
 export default function EditProfilePage() {
   const { theme } = useTheme();
   const { showPopUp, messageType, setShowPopUp, setMessageType } = usePopUp();
   const { mutate } = useSWRConfig();
 
-  const [aboutData, setAboutData] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [editPassword, setEditPassword] = useState(false);
   const [error, setError] = useState(false);
-  const [linksData, setlinksData] = useState([]);
-  const [linkId, setLinkId] = useState(null);
-  const [errorPopUp, setErrorPopUp] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [newLinks, setNewLinks] = useState([{ app: "-", url: "-" }]);
-  const links = newLinks.map((link) => ({
-    app: link.app,
-    url: link.url,
-  }));
+  const [userDataToEdit, setUserDataToEdit] = useState(null);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [formData, setFormData] = useState({
+    id: "",
+    email: "",
+    number: "",
+    password: "",
+  });
 
   const DarkCondition = theme === "dark" ? true : false;
   const fullName = userData && userData.fullName;
@@ -71,59 +116,110 @@ export default function EditProfilePage() {
     },
   };
 
-  const handleSaveEditCard = () => {
-    mutate(`${API_URL}/card/getAbout`);
-    mutate(`${API_URL}/card/getLinks`);
-  };
-  const handleCreateLink = async (e) => {
+  const handleForm = async (e) => {
     e.preventDefault();
-    try {
-      const createLink = await axios.post(
-        `${API_URL}/card/createLink`,
-        { links },
-        configAuth
-      );
+    setLoading(true);
+    if (!editPassword) {
+      try {
+        const editUserResponse = await axios.patch(
+          `${API_URL}/user/editUser`,
+          formData,
+          configAuth
+        );
 
-      if (createLink.status === 201) {
-        handleSaveEditCard();
-        setMessageType("created");
-        setShowPopUp(true);
+        if (editUserResponse.status === 200) {
+          mutate(`${API_URL}/user/getUser`);
+          setShowPopUp(true);
+          setMessageType("edited");
+        }
+      } catch (err) {
+        if (
+          err.response.data.errors &&
+          err.response.data.errors[0].type === "string.empty"
+        ) {
+          const field = err.response.data.errors[0].field;
+          setError({
+            ...error,
+            [field]: "Este campo é obrigatório",
+          });
+        } else if (err.response.data && err.response.data.errors) {
+          const field = err.response.data.errors[0].field;
+          setError({
+            ...error,
+            [field]: err.response.data.errors[0].message,
+          });
+        } else {
+          setShowPopUp(true);
+          setMessageType("error");
+          console.error(err.message);
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      if (
-        (err.response && err.response.data.message === "Token não fornecido") ||
-        err.response.data.message === "Falha ao autenticar token"
-      ) {
-        setShowPopUp(true);
-        setMessageType("notAuthenticated");
+    } else {
+      try {
+        const verifyPasswordResponse = await axios.post(
+          `${API_URL}/user/verify-password`,
+          { password: currentPassword },
+          configAuth
+        );
+
+        if (verifyPasswordResponse.status === 200) {
+          const editUserResponse = await axios.patch(
+            `${API_URL}/user/editUser`,
+            formData,
+            configAuth
+          );
+
+          if (editUserResponse.status === 200) {
+            mutate(`${API_URL}/user/getUser`);
+            setShowPopUp(true);
+            setMessageType("edited");
+            setEditPassword(false);
+          }
+        }
+      } catch (err) {
+        if (
+          err.response.data.errors &&
+          err.response.data.errors[0].type === "string.empty"
+        ) {
+          const field = err.response.data.errors[0].field;
+          setError({
+            ...error,
+            [field]: "Este campo é obrigatório",
+          });
+        } else if (err.response && err.response.data === "password incorrect") {
+          setError({
+            ...error,
+            currentPassword: "Senha atual incorreta",
+          });
+        } else if (err.response?.data.errors && err.response?.data.errors) {
+          const field = err.response.data.errors[0].field;
+          setError({
+            ...error,
+            [field]: err.response.data.errors[0].message,
+          });
+        } else {
+          setShowPopUp(true);
+          setMessageType("error");
+          console.error(err.message);
+        }
+      } finally {
+        setLoading(false);
       }
-      console.error(err.message);
-      setShowPopUp(true);
-      setMessageType("error");
     }
   };
 
-  const getAbout = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
-      const data = response.data;
-      setAboutData(data.about[0]);
-    } catch (error) {
-      setError(true);
-      console.error("Erro ao obter os dados do cartão:", error);
-    }
-  };
-  const getLinks = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/card/getLinks`, configAuth);
-      const data = response.data;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-      setLinkId(data[0]._id);
-      setlinksData(data[0].links);
-    } catch (error) {
-      setError(true);
-      console.error("Erro ao obter os dados do cartão:", error);
-    }
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  const handleChangeCurrentPassword = (event) => {
+    setCurrentPassword(event.target.value);
   };
   const verifyUser = async () => {
     try {
@@ -139,20 +235,48 @@ export default function EditProfilePage() {
       setUserData(false);
     }
   };
+
+  const getUser = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/user/getUser`, configAuth);
+
+      const data = response.data.user;
+      setUserDataToEdit(data);
+
+      setFormData({
+        id: data._id,
+        email: data.email,
+        number: data.number,
+        password: data.password,
+      });
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+    }
+  };
+
+  const handleEditPassword = () => {
+    setEditPassword(!editPassword);
+    if (editPassword) {
+      setFormData({
+        id: userDataToEdit._id,
+        email: formData.email,
+        number: formData.number,
+        password: userDataToEdit.password,
+      });
+    } else {
+      setFormData({
+        id: userDataToEdit._id,
+        email: formData.email,
+        number: formData.number,
+        password: "",
+      });
+    }
+  };
+
   useEffect(() => {
     verifyUser();
-    getAbout();
-    getLinks();
+    getUser();
     setLoadingScreen(false);
-    if (
-      messageType === "notAuthenticated" ||
-      messageType === "alreadyHasImage" ||
-      messageType === "notFoundImage"
-    ) {
-      setErrorPopUp(true);
-    } else {
-      setErrorPopUp(false);
-    }
 
     setTimeout(() => {
       setShowPopUp(false);
@@ -167,23 +291,22 @@ export default function EditProfilePage() {
     <>
       {showPopUp && (
         <PopUpMessage
-          error={messageType === "error" ? true : false}
-          error2={errorPopUp}
+          error={
+            messageType === "error" || messageType === "notAuthenticated"
+              ? true
+              : false
+          }
         >
-          {messageType === "created" && "Link criado com sucesso"}
           {messageType === "notAuthenticated" && "Usuário não autenticado"}
-          {messageType === "deleted" && "Link deletado com sucesso"}
           {messageType === "edited" && "Perfil editado com sucesso"}
           {messageType === "error" && "Algo deu errado"}
-          {messageType === "notFoundImage" && "Nenhuma imagem foi enviada"}
-          {messageType === "alreadyHasImage" && "Já existe essa imagem"}
         </PopUpMessage>
       )}
       <title>{fullName && `Editando perfil / ${fullName} `}</title>
       <Navigations hasUser={fullName} />
       <Container isDark={DarkCondition}>
-        <Title isDark={DarkCondition}> Detalhes de sobre </Title>
-        {aboutData === null ? (
+        <Title isDark={DarkCondition}> Detalhes de conta </Title>
+        {userDataToEdit === null ? (
           <>
             {error ? (
               <StyledFlexErrorMessage>
@@ -202,56 +325,77 @@ export default function EditProfilePage() {
             )}
           </>
         ) : (
-          <EditAbout
-            id={aboutData._id}
-            name={aboutData.name}
-            companyName={aboutData.companyName}
-            location={aboutData.location}
-            description={aboutData.description}
-            imageName={aboutData.imageName}
-            onSave={handleSaveEditCard}
-          />
-        )}
-
-        <Title isDark={DarkCondition}> Detalhes de links</Title>
-        {linksData.length === 0 ? (
-          <>
-            {error ? (
-              <StyledFlexErrorMessage>
-                <ErrorMessage isDark={DarkCondition}>
-                  Erro ao obter dados
-                </ErrorMessage>
-                <Image
-                  isDark={DarkCondition}
-                  imageDark="badEmoji-dark.png"
-                  image="badEmoji-white.png"
-                  alt=""
-                />
-              </StyledFlexErrorMessage>
-            ) : (
-              <LoadingScreen loadingContent />
-            )}
-          </>
-        ) : (
-          linksData.map((link) => (
-            <EditLink
-              key={link._id}
-              linkId={link._id}
-              id={linkId}
-              app={link.app}
-              url={link.url}
-              onSave={handleSaveEditCard}
+          <Form onSubmit={handleForm} isDark={DarkCondition}>
+            <InputAlt
+              isDark={DarkCondition}
+              label="Endereço de e-mail"
+              name="email"
+              onChange={handleChange}
+              value={formData.email}
             />
-          ))
-        )}
+            {error.email && <ErrorMessage>{error.email}</ErrorMessage>}
+            <InputAlt
+              isDark={DarkCondition}
+              label="Número de telefone"
+              name="number"
+              onChange={handleChange}
+              value={formData.number}
+              error={error.number}
+            />
+            {error.number && <ErrorMessage>{error.number}</ErrorMessage>}
+            <ButtonEditPassword
+              isDark={DarkCondition}
+              onClick={handleEditPassword}
+            >
+              Alterar senha
+            </ButtonEditPassword>
 
-        <Image
-          isDark={DarkCondition}
-          imageDark="plusDark.png"
-          image="plusLight.png"
-          alt=""
-          onClick={handleCreateLink}
-        />
+            {editPassword && (
+              <>
+                <InputAlt
+                  isDark={DarkCondition}
+                  label="Senha atual"
+                  placeholder="Senha atual"
+                  value={currentPassword}
+                  error={error.currentPassword}
+                  onChange={handleChangeCurrentPassword}
+                />
+                {error.currentPassword && (
+                  <ErrorMessage>{error.currentPassword}</ErrorMessage>
+                )}
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <InputAlt
+                    isDark={DarkCondition}
+                    label="Senha Nova"
+                    placeholder="Senha nova"
+                    name="password"
+                    value={formData.password}
+                    error={error.password}
+                    onChange={handleChange}
+                  />
+
+                  <Image
+                    style={{ marginTop: "36px" }}
+                    isDark={DarkCondition}
+                    imageDark="xDark.png"
+                    image="xLight.png"
+                    alt=""
+                    onClick={handleEditPassword}
+                  />
+                </div>
+                {error.password && (
+                  <ErrorMessage>{error.password}</ErrorMessage>
+                )}
+              </>
+            )}
+
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <Button type="submit" loading={loading}>
+                Salvar alterações
+              </Button>
+            </div>
+          </Form>
+        )}
       </Container>
     </>
   );
