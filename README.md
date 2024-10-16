@@ -24,7 +24,7 @@ A aplicação consiste em um site que te permite criar um sobre sua empresa e an
 
 
 ## Tecnologias 
-
+### Front-end
 - React
 - JavaScript
 - Mongoose
@@ -32,6 +32,15 @@ A aplicação consiste em um site que te permite criar um sobre sua empresa e an
 - Axios
 - react-device-detect
 - SWR
+### Back-end
+- TypeScript
+- Node.js
+- Express
+- Multer
+- Mongoose
+- JWT
+- Joi
+
 
 ## Features
 
