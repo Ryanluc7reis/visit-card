@@ -1,6 +1,10 @@
 # visit-card
 
-A aplicação consiste em um site que te permite criar um sobre sua empresa e anexar URLs importantes sobre a empresa ou sobre o usuário
+A aplicação consiste em um site que te permite criar um sobre sua empresa e anexar URLs importantes sobre a empresa ou sobre o usuário.
+
+- Front-end -> [repositório github](https://github.com/Ryanluc7reis/visit-card)
+- Back-end ->  [repositório github](https://github.com/Ryanluc7reis/visit-card-api)
+
 
 ## Layouts
 ![visitcard](https://github.com/user-attachments/assets/8b880e8b-60fb-43d2-9a96-e21c5bc1b7c9)
