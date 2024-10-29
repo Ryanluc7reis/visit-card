@@ -1,0 +1,13 @@
+services:
+  visit-card:
+    build: .
+    container_name: visit-card
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SESSION_TOKEN_NAME=${NEXT_PUBLIC_SESSION_TOKEN_NAME}
+      - NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
+      - NEXT_PUBLIC_URL_API=${NEXT_PUBLIC_URL_API}
+    volumes:
+      - .:/app
