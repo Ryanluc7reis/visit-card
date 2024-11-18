@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useTheme } from "@/context/ContextTheme";
 import Image from "../image/Image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const AboutContainer = styled.div`
   width: 90%;
@@ -160,14 +160,15 @@ export default function About({
   const handleShowLink = () => {
     setShowLink(true);
   };
-  const handleRedirectNumber = () => {
-    window.location.href(`tel:${currentNumber}`);
+
+  const handleShowOptionsPhone = () => {
+    if (showOptions) {
+      setShowOptions(!showOptions);
+    }
   };
+
   return (
-    <AboutContainer
-      onClick={() => setShowOptions(!showOptions)}
-      isDark={DarkCondition}
-    >
+    <AboutContainer onClick={handleShowOptionsPhone} isDark={DarkCondition}>
       <StyledFlexImages>
         <ImageAlt
           isDark={DarkCondition}
@@ -190,8 +191,8 @@ export default function About({
               Salvar contato direto na conta
             </Text>
             <Line isDark={DarkCondition} />
-            <Text isDark={DarkCondition} onClick={handleRedirectNumber}>
-              Ir com o número para o teclado
+            <Text isDark={DarkCondition} href={`tel:${currentNumber}`}>
+              Ir com o número para o discador
             </Text>
           </Options>
         )}
