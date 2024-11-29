@@ -29,7 +29,7 @@ const Form = styled.form`
 const BoxContainer = styled.div`
   width: 90%;
   min-height: 180px;
-  padding: 10px;
+  padding: 20px;
   background: ${(props) =>
     props.isDark
       ? props.theme.backgroundContentDark
@@ -209,7 +209,7 @@ export default function CreateProfilePage() {
           configAuth
         );
         if (createLink.status === 201) {
-          router.push(`${URL}/${userData?.user}`);
+          router.push(`${URL}/${userData.user}`);
           setShowPopUp(true);
           setMessageType("createdProfile");
         }
@@ -259,11 +259,11 @@ export default function CreateProfilePage() {
       const response = await axios.get(`${API_URL}/card/getAbout`, configAuth);
       const data = response.data;
       if (data) {
-        router.push(`${URL}/${userData?.user}`);
+        router.push(`${URL}/${userData.user}`);
         setTimeout(() => {
           setMessageType("hasProfile");
           setShowPopUp(true);
-        }, 500);
+        }, 1500);
       }
     } catch (error) {
       console.error("Erro ao obter os dados do cartão:", error);
@@ -284,9 +284,9 @@ export default function CreateProfilePage() {
       setUserData(false);
     }
   };
+
   useEffect(() => {
     verifyUser();
-    getAbout();
     setLoadingScreen(false);
     setTimeout(() => {
       setShowPopUp(false);
@@ -296,7 +296,9 @@ export default function CreateProfilePage() {
   if (loadingScreen) {
     return <LoadingScreen />;
   }
-
+  if (userData && userData) {
+    getAbout();
+  }
   return (
     <>
       {showPopUp && (
