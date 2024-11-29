@@ -194,6 +194,7 @@ export default function EditUserPage() {
                   isDark={DarkCondition}
                   imageDark="badEmoji-dark.png"
                   image="badEmoji-white.png"
+                  noHover
                   alt=""
                 />
               </StyledFlexErrorMessage>
@@ -225,6 +226,7 @@ export default function EditUserPage() {
                   isDark={DarkCondition}
                   imageDark="badEmoji-dark.png"
                   image="badEmoji-white.png"
+                  noHover
                   alt=""
                 />
               </StyledFlexErrorMessage>

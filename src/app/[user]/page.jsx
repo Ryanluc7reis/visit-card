@@ -218,6 +218,7 @@ export default function ProfilePage() {
                   isDark={DarkCondition}
                   imageDark="badEmoji-dark.png"
                   image="badEmoji-white.png"
+                  noHover
                   alt=""
                 />
               </StyledFlexErrorMessage>

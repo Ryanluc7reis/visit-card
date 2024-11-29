@@ -189,11 +189,12 @@ export default function About({
           alt=""
           onClick={handleShowLink}
         />
-        <ImageLabel image={image} />
+        <ImageLabel noHover image={image} />
         <ImageAlt
           isDark={DarkCondition}
           imageDark="phone.png"
           image="phoneLight.png"
+          noHover={false}
           alt=""
           onClick={() => setShowOptions(!showOptions)}
         />
@@ -219,6 +220,7 @@ export default function About({
             isDark={DarkCondition}
             imageDark="map.png"
             image="mapLight.png"
+            noHover
             alt=""
           />
           <Localization isDark={DarkCondition}>{location}</Localization>

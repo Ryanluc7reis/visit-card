@@ -26,7 +26,7 @@ export default function LoadingScreen({ loadingContent, ...props }) {
     <>
       {loadingContent && (
         <ScreenLoading {...props}>
-          <Image image="loader.svg" alt="" />
+          <Image image="loader.svg" alt="" noHover />
         </ScreenLoading>
       )}
       {!loadingContent && <Screen isDark={DarkCondition} {...props} />}

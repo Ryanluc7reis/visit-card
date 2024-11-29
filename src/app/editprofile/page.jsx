@@ -58,7 +58,7 @@ const InputAlt = styled(Input)`
 `;
 const Title = styled.h3`
   font-weight: bold;
-  margin: 7px 0;
+  margin-bottom: 25px;
   text-align: center;
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};

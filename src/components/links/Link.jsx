@@ -23,7 +23,7 @@ const LinkContainer = styled.a`
   :hover {
     background-color: ${(props) =>
       props.isDark ? props.theme.hoverDark : props.theme.hoverLight};
-    cursor: pointer;
+    cursor: ${(props) => (props.showPix ? "default" : "pointer")};
   }
 
   @media (min-width: 768px) {
@@ -56,13 +56,29 @@ export default function Link({ name, location, pixKey, url, app }) {
   };
 
   return (
-    <LinkContainer onClick={handleRedirect} isDark={DarkCondition}>
-      {app === "Instagram" && <ImageByWidth image="instagram.png" alt="" />}
-      {app === "Whatsapp" && <ImageByWidth image="whatsapp.png" alt="" />}
-      {app === "Facebook" && <ImageByPadding image="facebook.png" alt="" />}
-      {app === "Telegram" && <ImageByPadding image="telegram.png" alt="" />}
-      {app === "Linkedin" && <ImageByPadding image="linkedin.png" alt="" />}
-      {app === "Pix" && <ImageByWidth image="pix.png" alt="" />}
+    <LinkContainer
+      showPix={showPix}
+      onClick={handleRedirect}
+      isDark={DarkCondition}
+    >
+      {app === "Instagram" && (
+        <ImageByWidth image="instagram.png" alt="Link para Instagram" noHover />
+      )}
+      {app === "Whatsapp" && (
+        <ImageByWidth image="whatsapp.png" alt="Link para Whatsapp" noHover />
+      )}
+      {app === "Facebook" && (
+        <ImageByPadding image="facebook.png" alt="Link para Facebook" noHover />
+      )}
+      {app === "Telegram" && (
+        <ImageByPadding image="telegram.png" alt="Link para Telegram" noHover />
+      )}
+      {app === "Linkedin" && (
+        <ImageByPadding image="linkedin.png" alt="Link para Linkedin" noHover />
+      )}
+      {app === "Pix" && (
+        <ImageByWidth image="pix.png" alt="Link para Pix" noHover />
+      )}
       {showPix && (
         <GeneratorPix
           pixKey={pixKey}
@@ -78,6 +94,7 @@ export default function Link({ name, location, pixKey, url, app }) {
         isDark={DarkCondition}
         imageDark="right-arrowDark.png"
         image="right-arrowLight.png"
+        noHover
         alt=""
       />
     </LinkContainer>

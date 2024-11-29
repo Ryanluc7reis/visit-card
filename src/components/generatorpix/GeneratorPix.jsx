@@ -56,7 +56,7 @@ const ButtonCopy = styled.div`
   cursor: pointer;
 
   :hover {
-    background-color: "#677db7";
+    background-color: #424c68;
   }
 `;
 const ButtonShareQRcode = styled(ButtonCopy)`
@@ -210,12 +210,12 @@ export default function GeneratorPix({ name, location, pixKey, setShowPix }) {
             </div>
 
             <ButtonCopy isDark={DarkCondition} onClick={copyToClipboard}>
-              <Image image="copy-full-white.png" alt="" />
+              <Image image="copy-full-white.png" alt="" noHover />
               <h4>Copiar código</h4>
             </ButtonCopy>
 
             <ButtonShareQRcode isDark={DarkCondition} onClick={shareQRCode}>
-              <Image image="share-qrCode.png" alt="" />
+              <Image image="share-qrCode.png" alt="" noHover />
               <h4>Compartilhar QR Code</h4>
             </ButtonShareQRcode>
           </>

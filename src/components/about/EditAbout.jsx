@@ -207,12 +207,12 @@ export default function EditAbout({
 
       <InputAlt
         isDark={DarkCondition}
-        label="Imagem de sobre"
+        label="Imagem de perfil"
         value={imageName}
       />
       <ButtonEditImage
         isDark={DarkCondition}
-        onClick={() => setEditImage(true)}
+        onClick={() => setEditImage(!editImage)}
       >
         Alterar imagem
       </ButtonEditImage>

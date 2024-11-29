@@ -56,7 +56,7 @@ const ButtonCopy = styled.div`
   cursor: pointer;
 
   :hover {
-    background-color: "#677db7";
+    background-color: #424c68;
   }
 `;
 const ButtonShare = styled(ButtonCopy)`
@@ -157,17 +157,17 @@ export default function GeneratorPageLink({ setShowLink, setLinkCurrent }) {
         </div>
 
         <ButtonCopy isDark={DarkCondition} onClick={copyToClipboard}>
-          <Image image="copy-full-white.png" alt="" />
+          <Image image="copy-full-white.png" alt="" noHover />
           <h4>Copiar link</h4>
         </ButtonCopy>
 
         <ButtonShare isDark={DarkCondition} onClick={shareLink}>
-          <Image image="share-qrCode.png" alt="" />
+          <Image image="share-qrCode.png" alt="" noHover />
           <h4>Compartilhar Link</h4>
         </ButtonShare>
 
         <ButtonShare isDark={DarkCondition} onClick={shareQRCode}>
-          <Image image="share-qrCode.png" alt="" />
+          <Image image="share-qrCode.png" alt="" noHover />
           <h4>Compartilhar QRCode</h4>
         </ButtonShare>
       </BoxLink>
