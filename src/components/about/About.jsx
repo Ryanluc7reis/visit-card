@@ -105,7 +105,7 @@ const OptionsPhone = styled.div`
   @media (min-width: 1024px) {
     right: 24%;
   }
-  @media (min-width: 1349px) {
+  @media (min-width: 1287px) {
     right: 30%;
   }
 `;
