@@ -78,7 +78,7 @@ const Description = styled.h4`
   color: ${(props) =>
     props.isDark ? props.theme.textDark : props.theme.textLight};
 `;
-const Options = styled.div`
+const OptionsPhone = styled.div`
   position: absolute;
   margin-top: 110px;
   width: auto;
@@ -103,6 +103,13 @@ const Options = styled.div`
   @media (min-width: 1349px) {
     right: 30%;
   }
+`;
+const OptionsPhoneContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
 `;
 const Text = styled.a`
   color: ${(props) =>
@@ -168,7 +175,7 @@ export default function About({
   };
 
   return (
-    <AboutContainer onClick={handleShowOptionsPhone} isDark={DarkCondition}>
+    <AboutContainer isDark={DarkCondition}>
       <StyledFlexImages>
         <ImageAlt
           isDark={DarkCondition}
@@ -186,15 +193,17 @@ export default function About({
           onClick={() => setShowOptions(!showOptions)}
         />
         {showOptions && (
-          <Options isDark={DarkCondition}>
-            <Text onClick={handleDownloadVCard} isDark={DarkCondition}>
-              Salvar contato direto na conta
-            </Text>
-            <Line isDark={DarkCondition} />
-            <Text isDark={DarkCondition} href={`tel:${currentNumber}`}>
-              Ir com o número para o discador
-            </Text>
-          </Options>
+          <OptionsPhoneContainer onClick={handleShowOptionsPhone}>
+            <OptionsPhone isDark={DarkCondition}>
+              <Text onClick={handleDownloadVCard} isDark={DarkCondition}>
+                Salvar contato direto na conta
+              </Text>
+              <Line isDark={DarkCondition} />
+              <Text isDark={DarkCondition} href={`tel:${currentNumber}`}>
+                Ir com o número para o discador
+              </Text>
+            </OptionsPhone>
+          </OptionsPhoneContainer>
         )}
       </StyledFlexImages>
 
