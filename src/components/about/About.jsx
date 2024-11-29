@@ -94,9 +94,14 @@ const OptionsPhone = styled.div`
       ? props.theme.backgroundContentDark
       : props.theme.backgroundContentLight};
 
-  @media (min-width: 768px) {
+  @media (min-width: 320px) {
+    top: 2%;
     right: 15%;
   }
+  @media (min-width: 375px) {
+    top: 2%;
+  }
+
   @media (min-width: 1024px) {
     right: 24%;
   }
