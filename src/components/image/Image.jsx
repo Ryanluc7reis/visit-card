@@ -15,7 +15,10 @@ const StyledImage = styled.img`
     }
   }
 `;
-
+const StyledImageX = styled(StyledImage)`
+  position: fixed;
+  right: 2%;
+`;
 export default function Image({
   image,
   imageDark,
@@ -27,7 +30,7 @@ export default function Image({
   return (
     <>
       {isMenu ? (
-        <StyledImage src={"/x.png"} {...props} />
+        <StyledImageX src={"/x.png"} {...props} />
       ) : (
         <StyledImage
           src={isDark ? imageDark : image}
